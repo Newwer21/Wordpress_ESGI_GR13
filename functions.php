@@ -1,5 +1,7 @@
 <?php
 	
+include_once plugin_dir_path( __FILE__ ).'/types/produits.php';
+	
 	add_action( 'wp_enqueue_scripts', 'include_style' );
 
 	function include_style() {
