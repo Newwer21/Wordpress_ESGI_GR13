@@ -1,5 +1,5 @@
 /**
-Theme Name: Super Test
+Theme Name: Theme groupe 13
 Theme URI: http://###
 Author: ESGI
 Author URI: http://###
@@ -88,7 +88,8 @@ a img.aligncenter {
 
 body {
     /*background-color: lightblue;*/
-    margin: 0;
+    margin: 0 auto;
+    background-color: #E1E8E7;
 }
 
 header .header-main {
