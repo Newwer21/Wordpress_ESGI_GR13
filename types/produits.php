@@ -8,7 +8,7 @@
  * @Author: Fy
  * @Date:   2014-10-28 23:23:34
  * @Last Modified by:   Fy
- * @Last Modified time: 2014-10-29 17:19:12
+ * @Last Modified time: 2014-10-29 17:56:26
  */
 
 add_action( 'init', 'produits_register' );
@@ -44,4 +44,7 @@ function produits_register() {
 	  );
  
 	register_post_type( 'produits' , $args );
+
+	register_taxonomy("Types", array("produits"), array("hierarchical" => true, "label" => "Types", "singular_label" => "type", "rewrite" => true));
+
 }
