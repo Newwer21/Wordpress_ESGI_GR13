@@ -1,5 +1,3 @@
-azertgfhjfdsq
-
 <?php
 
 /*philippe test
