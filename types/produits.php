@@ -1,9 +1,14 @@
 <?php
+
+/*philippe test
+*/
+
+
 /**
  * @Author: Fy
  * @Date:   2014-10-28 23:23:34
  * @Last Modified by:   Fy
- * @Last Modified time: 2014-10-28 23:23:58
+ * @Last Modified time: 2014-10-29 17:19:12
  */
 
 add_action( 'init', 'produits_register' );
