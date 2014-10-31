@@ -27,43 +27,13 @@ include_once plugin_dir_path( __FILE__ ).'/types/produits.php';
 			$args = array(
 				'name'          => 'Zone Latérale Gauche',
 				'id'            => 'zone_widget_gauche',
+				'before_widget' => '<div id="%1$s" class="widget %2$s">',
+				'after_widget'  => '</div>',
+				'before_title'  => '<h2 class="widgettitle">',
+				'after_title'   => '</h2>'
 			);
 		
 			register_sidebar( $args );
 		
 	}
-
-	add_action( 'widgets_init', 'theme_register_widget' );
-
-	function theme_register_widget()
-	{
-		register_widget( 'CustomWidget' );
-	}
-
-	class CustomWidget extends WP_Widget {
-
-		function CustomWidget() 
-		{
-			parent::__construct( false, 'Mon Widget' );
-		}
-
-		function widget( $args, $instance )
-		{
-			echo $args['before_widget'];
-		}
-
-		function update($new, $old)
-		{
-
-		}
-
-		function form($instance)
-		{
-			echo '<p>
-					<label>Nom : </label><input type="text" name="nom" />
-				 </p>';
-		}
-
-	}
-
 ?>

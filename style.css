@@ -104,7 +104,8 @@ header .header-main {
 
 .sidebar-1 {
     float: left;
-    width: 300px;
+    width: 200px;
+    min-height: 500px;
     /*background-color: #CCC;*/
 }
 

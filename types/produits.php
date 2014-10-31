@@ -44,7 +44,7 @@ function produits_register() {
 	  );
  
 	register_post_type( 'produits' , $args );
-	register_taxonomy("Types", array("produits"), array("hierarchical" => true, "label" => "Types", "singular_label" => "type", "rewrite" => true));
+	register_taxonomy("types", array("produits"), array("hierarchical" => true, "label" => "Types", "singular_label" => "type", "rewrite" => true));
 
 /* META_BOX PRODUITS */
 	add_action("admin_init", "newProduit_init");
