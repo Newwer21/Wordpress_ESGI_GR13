@@ -8,7 +8,7 @@
  * @Author: Fy
  * @Date:   2014-10-28 23:23:34
  * @Last Modified by:   Fy
- * @Last Modified time: 2014-11-01 18:43:43
+ * @Last Modified time: 2014-10-30 23:18:31
  */
 
 add_action( 'init', 'produits_register' );
@@ -40,11 +40,12 @@ function produits_register() {
 		'capability_type' => 'post',
 		'hierarchical' => false,
 		'menu_position' => null,
-		'supports' => array('title','editor','thumbnail')
+		'supports' => array('title','editor','thumbnail','custom-fields')
 	  );
  
 	register_post_type( 'produits' , $args );
 	register_taxonomy("types", array("produits"), array("hierarchical" => true, "label" => "Types", "singular_label" => "type", "rewrite" => true));
+
 /* META_BOX PRODUITS */
 	add_action("admin_init", "newProduit_init");
 	function newProduit_init(){
@@ -53,23 +54,60 @@ function produits_register() {
 	*/	}
 
 	function caract_produit(){
-	  global $post;
-	  $custom = get_post_custom($post->ID);
-	  $prix_produit = $custom["prix_produit"][0];
-	  $taille_produit = $custom["taille_produit"][0];
-	  $processeur_produit = $custom["processeur_produit"][0];
-	  $chipset_produit = $custom["chipset_produit"][0];
-	  $ram_produit = $custom["ram_produit"][0];
+	  // global $post;
+	  // $custom = get_post_custom($post->ID);
+	  // $prix_produit = $custom["prix_produit"][0];
+	  // $taille_produit = $custom["taille_produit"][0];
+	  // $processeur_produit = $custom["processeur_produit"][0];
+	  // $chipset_produit = $custom["chipset_produit"][0];
+	  // $ram_produit = $custom["ram_produit"][0];
 
-	   echo 'box prix';  
-	   echo 'box taille ecran';  
-	   echo 'box processeur';  
+	  /* get_post_meta() fonctionne pour récuperer les valeurs des meta box, 
+	  get_post_custom() uniquement pour les custom fields ... */
+
+	  /* Source : http://wabeo.fr/jouons-avec-les-meta-boxes/ */
+
+	  echo 'prix '.$prix_produit = get_post_meta($post->ID, 'prix_produit', true);
+	  echo 'proc '.$processeur_produit = get_post_meta($post->ID, 'processeur_produit', true);
+	  echo 'chip '.$chipset_produit = get_post_meta($post->ID, 'chipset_produit', true);
+	  echo 'ram '.$ram_produit = get_post_meta($post->ID, 'ram_produit', true);
+
+	   echo '<table>
+	   			<tr>
+	   				<td>
+		   				<label for="prix_produit">Prix </label>
+		   				<input type="text" id="prix_produit" name="prix_produit" value="'.$prix_produit.'">
+		   			</td>
+	   			</tr>
+	   			<tr>
+	   				<td>
+		   				<label for="processeur_produit">Processeur  </label>
+		   				<input type="text" id="processeur_produit" name="processeur_produit" value="'.$processeur_produit.'">
+		   			</td>
+	   			</tr>
+	   			<tr>
+	   				<td>
+		   				<label for="chipset_produit">Chipset </label>
+		   				<input type="text" id="chipset_produit" name="chipset_produit" value="'.$chipset_produit.'">
+		   			</td>
+	   			</tr>
+	   			<tr>
+	   				<td>
+		   				<label for="ram_produit">RAM </label>
+		   				<input type="text" id="ram_produit" name="ram_produit" value="'.$ram_produit.'">
+		   			</td>
+	   			</tr>
+	   		</table>';	
 	}
 
 	add_action('save_post', 'save_details');
 	function save_details(){
 	  global $post;
-	  update_post_meta($post->ID, "prix_produit", $_POST["prix_produit"]);
+	  update_post_meta($post->ID, "prix_produit", intval($_POST["prix_produit"]));
+	  update_post_meta($post->ID, "processeur_produit", sanitize_text_field($_POST["processeur_produit"]));
+	  update_post_meta($post->ID, "chipset_produit", sanitize_text_field($_POST["chipset_produit"]));
+	  update_post_meta($post->ID, "ram_produit", intval($_POST["ram_produit"]));
+
 	}
 /* META_BOX PRODUITS */
 
@@ -79,12 +117,10 @@ add_filter("manage_edit-produits_columns", "produit_edit_columns");
 function produit_edit_columns($columns){
   $columns = array(
     "cb" => '<input type="checkbox" />',
-
     "title" => "Nom produit",
     "processeur" => "Processeur",
     "chipset" => "Chipset",
     "prix" => "Prix",
-
   );
   return $columns;
 }
@@ -113,10 +149,4 @@ function produit_custom_columns($column){
       break;
   }
 }
-
-/*function remove_extra_meta_boxes() {
-	remove_meta_box( 'postcustom' , 'post' , 'normal' );
-}
-add_action( 'admin_menu' , 'remove_extra_meta_boxes' );*/
-
 }
