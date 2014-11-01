@@ -8,7 +8,7 @@
  * @Author: Fy
  * @Date:   2014-10-28 23:23:34
  * @Last Modified by:   Fy
- * @Last Modified time: 2014-10-30 23:24:21
+ * @Last Modified time: 2014-10-30 23:18:31
  */
 
 add_action( 'init', 'produits_register' );
@@ -74,42 +74,42 @@ function produits_register() {
 	}
 /* META_BOX PRODUITS */
 
-	add_action("manage_posts_custom_column",  "produit_custom_columns");
-	add_filter("manage_edit-produits_columns", "produit_edit_columns");
-	 
-	function produit_edit_columns($columns){
-	  $columns = array(
-	    "cb" => '<input type="checkbox" />',
-	    "title" => "Nom produit",
-	    "processeur" => "Processeur",
-	    "chipset" => "Chipset",
-	    "prix" => "Prix",
-	  );
-	  return $columns;
-	}
-	function produit_custom_columns($column){
-	  global $post;
-	 
-	  switch ($column) {
-	    case "title":
-	      $custom = get_post_custom();
-	      echo $custom[""][0];
-	      break;
-	      case "processeur":
-	      $custom = get_post_custom();
-	      echo $custom["processeur_produit"][0];
-	      break;
-	      case "chipset":
-	      $custom = get_post_custom();
-	      echo $custom["chipset_produit"][0];
-	      break;
-	    case "prix":
-	      $custom = get_post_custom();
-	      echo $custom["prix_produit"][0];
-	      break;
-	    case "skills":
-	      echo get_the_term_list($post->ID, 'types', '', ', ','');
-	      break;
-	  }
-	}
+add_action("manage_posts_custom_column",  "produit_custom_columns");
+add_filter("manage_edit-produits_columns", "produit_edit_columns");
+ 
+function produit_edit_columns($columns){
+  $columns = array(
+    "cb" => '<input type="checkbox" />',
+    "title" => "Nom produit",
+    "processeur" => "Processeur",
+    "chipset" => "Chipset",
+    "prix" => "Prix",
+  );
+  return $columns;
+}
+function produit_custom_columns($column){
+  global $post;
+ 
+  switch ($column) {
+    case "title":
+      $custom = get_post_custom();
+      echo $custom[""][0];
+      break;
+      case "processeur":
+      $custom = get_post_custom();
+      echo $custom["processeur_produit"][0];
+      break;
+      case "chipset":
+      $custom = get_post_custom();
+      echo $custom["chipset_produit"][0];
+      break;
+    case "prix":
+      $custom = get_post_custom();
+      echo $custom["prix_produit"][0];
+      break;
+    case "skills":
+      echo get_the_term_list($post->ID, 'types', '', ', ','');
+      break;
+  }
+}
 }
