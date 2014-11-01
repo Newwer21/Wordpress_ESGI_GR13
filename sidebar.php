@@ -1,1 +1,0 @@
-<aside class="sidebar-1"><?php dynamic_sidebar('zone_widget_gauche'); ?></aside>
