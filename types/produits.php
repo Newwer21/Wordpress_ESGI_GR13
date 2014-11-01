@@ -8,7 +8,7 @@
  * @Author: Fy
  * @Date:   2014-10-28 23:23:34
  * @Last Modified by:   Fy
- * @Last Modified time: 2014-10-30 23:18:31
+ * @Last Modified time: 2014-11-01 18:43:43
  */
 
 add_action( 'init', 'produits_register' );
@@ -45,7 +45,6 @@ function produits_register() {
  
 	register_post_type( 'produits' , $args );
 	register_taxonomy("types", array("produits"), array("hierarchical" => true, "label" => "Types", "singular_label" => "type", "rewrite" => true));
-
 /* META_BOX PRODUITS */
 	add_action("admin_init", "newProduit_init");
 	function newProduit_init(){
@@ -80,10 +79,12 @@ add_filter("manage_edit-produits_columns", "produit_edit_columns");
 function produit_edit_columns($columns){
   $columns = array(
     "cb" => '<input type="checkbox" />',
+
     "title" => "Nom produit",
     "processeur" => "Processeur",
     "chipset" => "Chipset",
     "prix" => "Prix",
+
   );
   return $columns;
 }
@@ -112,4 +113,10 @@ function produit_custom_columns($column){
       break;
   }
 }
+
+/*function remove_extra_meta_boxes() {
+	remove_meta_box( 'postcustom' , 'post' , 'normal' );
+}
+add_action( 'admin_menu' , 'remove_extra_meta_boxes' );*/
+
 }
