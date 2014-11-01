@@ -104,14 +104,15 @@ header .header-main {
 
 .sidebar-1 {
     float: left;
-    width: 300px;
+    width: 200px;
+    min-height: 500px;
     /*background-color: #CCC;*/
 }
 
-.content {
+.content-produits {
     float: left;
     
-    /*background-color: #eee;*/
+    background-color: #eee;
 }
 
 .fix_clear {
