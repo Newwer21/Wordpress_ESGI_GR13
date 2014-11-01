@@ -36,4 +36,15 @@ include_once plugin_dir_path( __FILE__ ).'/types/produits.php';
 			register_sidebar( $args );
 		
 	}
+
+	/* Permet d'exécuter les codes PHP sur les widgets Textes */
+	function php_execute($html){
+		if(strpos($html,"<"."?php")!==false){ ob_start(); eval("?".">".$html);
+		$html=ob_get_contents();
+		ob_end_clean();
+		}
+		return $html;
+	}
+	
+	add_filter('widget_text','php_execute',100);
 ?>

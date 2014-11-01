@@ -109,10 +109,10 @@ header .header-main {
     /*background-color: #CCC;*/
 }
 
-.content {
+.content-produits {
     float: left;
     
-    /*background-color: #eee;*/
+    background-color: #eee;
 }
 
 .fix_clear {

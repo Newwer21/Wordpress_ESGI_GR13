@@ -65,7 +65,7 @@ query_posts($arguments);
     <a href="<?php the_permalink(); ?>"><?php the_title(); ?></a>
   </h3>
   <p class="post-info">
-    Posté le <?php the_date(); ?> dans <?php ?> par <?php the_author(); ?>.
+    Posté le <?php the_date(); ?> dans <?php the_category() ;?> par <?php the_author(); ?>.
   </p>
   <div class="post-content">
     <?php the_content(); ?>

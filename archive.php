@@ -2,7 +2,7 @@
 <?php get_sidebar(); ?>
 
 <div class="main">
-  Archives
+  Archives page
   <?php if (have_posts()) : ?>
     <?php while (have_posts()) : the_post(); ?>
       <div class="project">
