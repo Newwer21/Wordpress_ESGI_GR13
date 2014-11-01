@@ -2,6 +2,8 @@
 	
 include_once plugin_dir_path( __FILE__ ).'/types/produits.php';
 	
+	add_theme_support( 'post-thumbnails', array( 'produits' ) ); 
+	
 	add_action( 'wp_enqueue_scripts', 'include_style' );
 
 	function include_style() {
