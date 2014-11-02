@@ -8,11 +8,12 @@
  * @Author: Fy
  * @Date:   2014-10-28 23:23:34
  * @Last Modified by:   Fy
- * @Last Modified time: 2014-10-30 23:18:31
+ * @Last Modified time: 2014-11-02 15:01:19
  */
 
-add_action( 'init', 'produits_register' );
 
+/* Ajout produit type post*/
+add_action( 'init', 'produits_register' );
 function produits_register() {
  
 	$labels = array(
@@ -44,15 +45,17 @@ function produits_register() {
 	  );
  
 	register_post_type( 'produits' , $args );
+/* Ajout d'une categorie (taxonomy) a produit*/
 	register_taxonomy("types", array("produits"), array("hierarchical" => true, "label" => "Types", "singular_label" => "type", "rewrite" => true));
+/****************************/
 
-/* META_BOX PRODUITS */
+/* admin - personalisation  ajout produits */
+	// ajout de la meta box
 	add_action("admin_init", "newProduit_init");
 	function newProduit_init(){
 		  add_meta_box("caract_id", "caracteristique", "caract_produit", "produits", "normal", "low");
-	/*	  add_meta_box("credits_meta", "Design &amp; Build Credits", "credits_meta", "portfolio", "normal", "low");
-	*/	}
-
+	}
+	// ajout du code html
 	function caract_produit(){
 	  // global $post;
 	  // $custom = get_post_custom($post->ID);
@@ -99,7 +102,7 @@ function produits_register() {
 	   			</tr>
 	   		</table>';	
 	}
-
+	//sauvegarde des données crées
 	add_action('save_post', 'save_details');
 	function save_details(){
 	  global $post;
@@ -109,11 +112,11 @@ function produits_register() {
 	  update_post_meta($post->ID, "ram_produit", intval($_POST["ram_produit"]));
 
 	}
-/* META_BOX PRODUITS */
+/**************************************/
 
+/* admin - personnalisation de l'affichage des produits*/
 add_action("manage_posts_custom_column",  "produit_custom_columns");
 add_filter("manage_edit-produits_columns", "produit_edit_columns");
- 
 function produit_edit_columns($columns){
   $columns = array(
     "cb" => '<input type="checkbox" />',
@@ -149,4 +152,7 @@ function produit_custom_columns($column){
       break;
   }
 }
+/****************************************/
+
+
 }
