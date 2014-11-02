@@ -66,6 +66,7 @@ function produits_register() {
 	  echo 'chip '.$chipset_produit = get_post_meta($post->ID, 'chipset_produit', true);
 	  echo 'ram '.$ram_produit = get_post_meta($post->ID, 'ram_produit', true);
 
+<<<<<<< HEAD
 	  $prix_produit = $custom['prix_produit'][0];
 	  $processeur_produit = $custom['processeur_produit'][0];
 	  $chipset_produit = $custom['chipset_produit'][0];
@@ -73,6 +74,12 @@ function produits_register() {
 	  $stock_produit = $custom['stock_produit'][0];
 	  
 	  // var_dump($custom);
+=======
+	  echo 'prix '.$prix_produit = get_post_meta($post->ID, 'prix_produit', true);
+	  echo 'proc '.$processeur_produit = get_post_meta($post->ID, 'processeur_produit', true);
+	  echo 'chip '.$chipset_produit = get_post_meta($post->ID, 'chipset_produit', true);
+	  echo 'ram '.$ram_produit = get_post_meta($post->ID, 'ram_produit', true);
+>>>>>>> parent of 4df99c9... MAJ Formulaire produit + affichage Front
 
 
 	   echo '<table>
@@ -117,6 +124,10 @@ function produits_register() {
 /* admin - personnalisation de l'affichage des produits*/
 add_action("manage_posts_custom_column",  "produit_custom_columns");
 add_filter("manage_edit-produits_columns", "produit_edit_columns");
+<<<<<<< HEAD
+=======
+ 
+>>>>>>> parent of 4df99c9... MAJ Formulaire produit + affichage Front
 function produit_edit_columns($columns){
   $columns = array(
     "cb" => '<input type="checkbox" />',
