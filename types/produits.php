@@ -8,7 +8,7 @@
  * @Author: Fy
  * @Date:   2014-10-28 23:23:34
  * @Last Modified by:   Fy
- * @Last Modified time: 2014-11-02 16:49:44
+ * @Last Modified time: 2014-11-02 17:38:19
  */
 
 
@@ -60,12 +60,12 @@ function produits_register() {
 	
 	  /* Source : http://wabeo.fr/jouons-avec-les-meta-boxes/ */
 
-<<<<<<< HEAD
+
 	  echo 'prix '.$prix_produit = get_post_meta($post->ID, 'prix_produit', true);
 	  echo 'proc '.$processeur_produit = get_post_meta($post->ID, 'processeur_produit', true);
 	  echo 'chip '.$chipset_produit = get_post_meta($post->ID, 'chipset_produit', true);
 	  echo 'ram '.$ram_produit = get_post_meta($post->ID, 'ram_produit', true);
-=======
+
 	  $prix_produit = $custom['prix_produit'][0];
 	  $processeur_produit = $custom['processeur_produit'][0];
 	  $chipset_produit = $custom['chipset_produit'][0];
@@ -73,7 +73,7 @@ function produits_register() {
 	  $stock_produit = $custom['stock_produit'][0];
 	  
 	  // var_dump($custom);
->>>>>>> origin/master
+
 
 	   echo '<table>
 	   			<tr>
