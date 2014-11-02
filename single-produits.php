@@ -5,14 +5,53 @@ Template Name: Produits
 ?>
 <?php get_header(); ?>
 <?php get_sidebar(); ?>
-<div class="main projects">
+<div class="main single-produits">
   template produits
   <?php if (have_posts()) : ?>
     <?php while (have_posts()) : the_post(); ?>
-      <div class="project">
-        <h3 class="project-name"><?php the_title(); ?></h3>
-        <p class="project-description"><?php the_excerpt(); ?></p>
-        
+    <?php
+      /* Récupération des données */
+      $custom = get_post_custom();
+      $prix_produit = $custom['prix_produit'][0];
+      $processeur_produit = $custom['processeur_produit'][0];
+      $chipset_produit = $custom['chipset_produit'][0];
+      $ram_produit = $custom['ram_produit'][0];
+      $stock_produit = $custom['stock_produit'][0];
+    ?>
+      <div class="single-produits-content">
+        <h3 class="single-produits-title"><?php the_title(); ?></h3>
+        <fig class="single-produits-img"><?php the_post_thumbnail(); ?></fig>
+        <p class="single-produits-description"><?php the_content(); ?></p>
+
+         <?php 
+              /* Affichage des données*/
+
+              echo '<table>
+                        <tr>
+                          <td>Prix : </td>
+                          <td>'.$prix_produit.'</td>
+                        </tr>
+                        <tr>
+                          <td>Processeur : </td>
+                          <td>'.$processeur_produit.'</td>
+                        </tr>
+                        <tr>
+                          <td>Chipset : </td>
+                          <td>'.$chipset_produit.'</td>
+                        </tr>
+                        <tr>
+                          <td>RAM : </td>
+                          <td>'.$ram_produit.'</td>
+                        </tr>
+
+                      </table>';
+              if ($stock_produit > 0) {
+                echo 'Réservation possible !';
+              }
+              else {
+                echo 'Non disponible';
+              }
+        ?>
       </div>
     <?php endwhile; ?>
   <?php endif; ?>
