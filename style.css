@@ -1,0 +1,130 @@
+/**
+Theme Name: Theme groupe 13
+Theme URI: http://###
+Author: ESGI
+Author URI: http://###
+Description: In 2014, our default theme lets you create a responsive magazine website with a sleek, modern design. Feature your favorite homepage content in either a grid or a slider. Use the three widget areas to customize your website, and change your content's layout with a full-width page template and a contributor page to show off your authors. Creating a magazine website with WordPress has never been easier.
+Version: 1.2
+Text Domain : Super Test
+*/
+
+/* WordPress Core
+-------------------------------------------------------------- */
+.alignnone {
+    margin: 5px 20px 20px 0;
+}
+
+.aligncenter,
+div.aligncenter {
+    display: block;
+    margin: 5px auto 5px auto;
+}
+
+.alignright {
+    float:right;
+    margin: 5px 0 20px 20px;
+}
+
+.alignleft {
+    float: left;
+    margin: 5px 20px 20px 0;
+}
+
+a img.alignright {
+    float: right;
+    margin: 5px 0 20px 20px;
+}
+
+a img.alignnone {
+    margin: 5px 20px 20px 0;
+}
+
+a img.alignleft {
+    float: left;
+    margin: 5px 20px 20px 0;
+}
+
+a img.aligncenter {
+    display: block;
+    margin-left: auto;
+    margin-right: auto
+}
+
+.wp-caption {
+    background: #fff;
+    border: 1px solid #f0f0f0;
+    max-width: 96%; /* Image does not overflow the content area */
+    padding: 5px 3px 10px;
+    text-align: center;
+}
+
+.wp-caption.alignnone {
+    margin: 5px 20px 20px 0;
+}
+
+.wp-caption.alignleft {
+    margin: 5px 20px 20px 0;
+}
+
+.wp-caption.alignright {
+    margin: 5px 0 20px 20px;
+}
+
+.wp-caption img {
+    border: 0 none;
+    height: auto;
+    margin: 0;
+    max-width: 98.5%;
+    padding: 0;
+    width: auto;
+}
+
+.wp-caption p.wp-caption-text {
+    font-size: 11px;
+    line-height: 17px;
+    margin: 0;
+    padding: 0 4px 5px;
+}
+
+body {
+    /*background-color: lightblue;*/
+    margin: 0 auto;
+    background-color: #E1E8E7;
+}
+
+header .header-main {
+    /*background-color: green;*/
+    /*border: 1px solid black;*/
+
+}
+
+#main {
+    border: 1px solid;
+}
+
+.main {float: left;}
+
+.sidebar-1 {
+    float: left;
+    width: 200px;
+    min-height: 500px;
+    /*background-color: #CCC;*/
+}
+
+.content-produits {
+    float: left;
+    
+    background-color: #eee;
+}
+
+.fix_clear {
+    clear: both;
+}
+
+.categories-sections {
+    float: left;
+}
+
+.sidebar-1 li {
+    list-style-type: none;
+}

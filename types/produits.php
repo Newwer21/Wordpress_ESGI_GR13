@@ -54,24 +54,9 @@ function produits_register() {
 	*/	}
 
 	function caract_produit(){
-	  // global $post;
-	  // $custom = get_post_custom($post->ID);
-	  // $prix_produit = $custom["prix_produit"][0];
-	  // $taille_produit = $custom["taille_produit"][0];
-	  // $processeur_produit = $custom["processeur_produit"][0];
-	  // $chipset_produit = $custom["chipset_produit"][0];
-	  // $ram_produit = $custom["ram_produit"][0];
-
-	  /* get_post_meta() fonctionne pour récuperer les valeurs des meta box, 
-	  get_post_custom() uniquement pour les custom fields ... */
-
+	
 	  /* Source : http://wabeo.fr/jouons-avec-les-meta-boxes/ */
 
-		  // echo 'prix '.$prix_produit = get_post_meta($post->ID, 'prix_produit', true);
-		  // echo 'proc '.$processeur_produit = get_post_meta($post->ID, 'processeur_produit', true);
-		  // echo 'chip '.$chipset_produit = get_post_meta($post->ID, 'chipset_produit', true);
-		  // echo 'ram '.$ram_produit = get_post_meta($post->ID, 'ram_produit', true);
-	  $custom = get_post_custom();
 	  $prix_produit = $custom['prix_produit'][0];
 	  $processeur_produit = $custom['processeur_produit'][0];
 	  $chipset_produit = $custom['chipset_produit'][0];
