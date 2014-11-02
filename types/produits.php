@@ -8,7 +8,7 @@
  * @Author: Fy
  * @Date:   2014-10-28 23:23:34
  * @Last Modified by:   Fy
- * @Last Modified time: 2014-10-30 23:18:31
+ * @Last Modified time: 2014-11-02 18:30:57
  */
 
 add_action( 'init', 'produits_register' );
@@ -56,6 +56,7 @@ function produits_register() {
 	function caract_produit(){
 	
 	  /* Source : http://wabeo.fr/jouons-avec-les-meta-boxes/ */
+	  $custom = get_post_custom($post->ID);
 
 	  $prix_produit = $custom['prix_produit'][0];
 	  $processeur_produit = $custom['processeur_produit'][0];
@@ -63,7 +64,7 @@ function produits_register() {
 	  $ram_produit = $custom['ram_produit'][0];
 	  $stock_produit = $custom['stock_produit'][0];
 	  
-	  // var_dump($custom);
+	 	// var_dump($custom);
 
 	   echo '<table>
 	   			<tr>
