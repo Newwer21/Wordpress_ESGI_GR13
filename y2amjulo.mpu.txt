@@ -1,0 +1,29 @@
+﻿Revert "produits.php"
+
+This reverts commit 1e85c881f6304a1da602d5fae990226eee4ff301.
+
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+# On branch master
+# Your branch is up-to-date with 'origin/master'.
+#
+# Changes to be committed:
+#	new file:   archive.php
+#	new file:   category.php
+#	new file:   comments.php
+#	new file:   footer.php
+#	new file:   functions.php
+#	new file:   header.php
+#	new file:   home.php
+#	new file:   index.php
+#	new file:   loop.php
+#	new file:   page.php
+#	new file:   search.php
+#	new file:   sidebar.php
+#	new file:   single-produits.php
+#	new file:   single.php
+#	new file:   style.css
+#	new file:   taxonomy.php
+#	modified:   types/produits.php
+#
+
