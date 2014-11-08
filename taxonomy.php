@@ -1,5 +1,5 @@
 <?php get_header(); ?>
-<?php get_sidebar(); ?>
+<?php get_sidebar(recherche); ?>
 
 <div class="main taxonomy">
 	In taxonomy pages..

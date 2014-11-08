@@ -111,11 +111,16 @@ header .header-main {
     /*background-color: #CCC;*/
 }
 
-.content-produits {
+.article-ordinateurs, .article-tablettes, .article-phablettes {
     float: left;
-    
+    padding: 5px;
+    margin: 5px;
     background-color: #eee;
 }
+
+/*.content-produits-phablettes {background-color: pink;}*/
+/*.content-produits-ordinateurs {background-color: lightgreen;}*/
+/*.content-produits-tablettes {background-color: lightblue;}*/
 
 .fix_clear {
     clear: both;

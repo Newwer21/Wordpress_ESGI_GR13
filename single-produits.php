@@ -20,6 +20,7 @@ Template Name: Produits
     ?>
       <div class="single-produits-content">
         <h3 class="single-produits-title"><?php the_title(); ?></h3>
+        <p class="single-category"><?php echo 'Catégorie : '; the_terms($post->ID, 'types');?></p>
         <fig class="single-produits-img"><?php the_post_thumbnail(); ?></fig>
         <p class="single-produits-description"><?php the_content(); ?></p>
 

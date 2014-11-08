@@ -3,68 +3,73 @@
 
 <section class="main home">
 Home page
+	<div class="fix_clear"></div>
+
+	<article class="content-produits">
+		<section class="content-produits-ordinateurs">
+			<header class="content-title"><h3>Les ordinateurs</h3></header>
+			<div class="fix_clear"></div>
+		
 <?php
-
-	/* Affichage Phablettes, modifier l'id en fonction de tes catégories */
-
-	// query_posts('post_types=produits');
-
-	// echo '<h1>'.get_cat_name('2').'</h1>';
-
-	// while (have_posts()) : the_post();
-
-	// 	echo '<h3>'.get_the_title().'</h3>';
-
-	// 	the_excerpt();
-
-	// endwhile; wp_reset_query();
-
-	// /* Affichage Tablettes, modifier l'id en fonction de tes catégories  */
-
-	// query_posts('cat=3');
-
-	// echo '<h1>'.get_cat_name('3').'</h1>';
-
-	// while (have_posts()) : the_post();
-
-	// 	echo '<h3>'.get_the_title().'</h3>';
-
-	// 	the_excerpt();
+	$home_paged = (get_query_var('paged'));
+	$arguments = array(
+	 'post_type' => 'produits',
+	 'post_status' => 'publish',
+	 'types' => 'ordinateurs',
+	 'paged' => $home_paged
+	);
+	query_posts($arguments);
 	
-	// endwhile; wp_reset_query();
-
-	// /* Affichage Ordinateurs, modifier l'id en fonction de tes catégories  */
-
-	// query_posts('cat=4');
-
-	// echo '<h1>'.get_cat_name('4').'</h1>';
-
-	// while (have_posts()) : the_post();
-
-	// 	echo '<h3>'.get_the_title().'</h3>';
-
-	// 	the_excerpt();
-	// endwhile; wp_reset_query(); 
-
+	while (have_posts()) : the_post(); 
 ?>
-
-<?php
-$home_paged = (get_query_var('paged'));
-$arguments = array(
- 'post_type' => 'produits',
- 'post_status' => 'publish',
- 'types' => 'ordinateurs',
- 'paged' => $home_paged
-);
-query_posts($arguments);
-?>
-
-<?php while (have_posts()) : the_post(); ?>
-<div class="content-produits">
-    <h3 class="project-name"><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h3>
-    <p class="project-description"><?php single_term_title(); ?> 	<?php the_post_thumbnail(); ?></p>
-    <?php single_term_title(); ?> 
-</div>
+			<article class="article-ordinateurs">
+			 	 <h3 class="ordi-name"><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h3>
+			    <p class="ordi-description"><?php single_tag_title(); ?> 	<?php the_post_thumbnail('medium'); ?></p> 
+			</article>
 <?php endwhile; ?>
-</section>
+			<div class="fix_clear"></div>
+		</section> <!-- .content-produits-ordinateurs -->
+
+		<section class="content-produits-tablettes">
+			<header class="content-title"><h3>Les tablettes</h3></header>
+<?php
+	$arguments = array(
+	 'post_type' => 'produits',
+	 'post_status' => 'publish',
+	 'types' => 'tablettes',
+	 'paged' => $home_paged
+	);
+	query_posts($arguments);
+	
+	while (have_posts()) : the_post(); 
+?>
+			<article class="article-tablettes">
+			 	<h3 class="tab-name"><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h3>
+			    <p class="tab-description"><?php single_tag_title(); ?> 	<?php the_post_thumbnail('medium'); ?></p> 
+			</article>
+<?php endwhile; ?>
+			<div class="fix_clear"></div>
+		</section>
+
+		<section class="content-produits-phablettes">
+			<header class="content-title"><h3>Les phablettes</h3></header>
+<?php
+	$arguments = array(
+	 'post_type' => 'produits',
+	 'post_status' => 'publish',
+	 'types' => 'phablettes',
+	 'paged' => $home_paged
+	);
+	query_posts($arguments);
+	
+	while (have_posts()) : the_post(); 
+?>
+			<article class="article-phablettes">
+			 	<h3 class="phab-name"><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h3>
+			    <p class="phab-description"><?php single_tag_title(); ?> 	<?php the_post_thumbnail('medium'); ?></p> 
+			</article>
+<?php endwhile; ?>
+			<div class="fix_clear"></div>
+		</section> <!-- .content-produits-phablettes -->
+	</article> <!-- .content-produit -->
 <?php get_footer(); ?>

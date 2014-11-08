@@ -110,64 +110,64 @@ function produits_register() {
 	  update_post_meta($post->ID, "stock_produit", intval($_POST["stock_produit"]));
 
 	}
-/* META_BOX PRODUITS */
+	/* META_BOX PRODUITS */
 
-add_action("manage_posts_custom_column",  "produit_custom_columns");
-add_filter("manage_edit-produits_columns", "produit_edit_columns");
+	add_action("manage_posts_custom_column",  "produit_custom_columns");
+	add_filter("manage_edit-produits_columns", "produit_edit_columns");
 
-/* Création de Colonnes personnalisées à l'affichage des Produits */ 
-function produit_edit_columns($columns){
-  $columns = array(
-    "cb" => '<input type="checkbox" />',
-    "title" => "Nom produit",
-    "processeur" => "Processeur",
-    "chipset" => "Chipset",
-    "prix" => "Prix",
-    "ram" => "Mémoire Vive",
-    "type" => "Type de produit",
-    "stock" => "Stock restant" /* Pour pouvoir créer la réservation des produits en front*/
-  );
-  return $columns;
-}
+	/* Création de Colonnes personnalisées à l'affichage des Produits */ 
+	function produit_edit_columns($columns){
+	  $columns = array(
+	    "cb" => '<input type="checkbox" />',
+	    "title" => "Nom produit",
+	    "processeur" => "Processeur",
+	    "chipset" => "Chipset",
+	    "prix" => "Prix",
+	    "ram" => "Mémoire Vive",
+	    "type" => "Type de produit",
+	    "stock" => "Stock restant" /* Pour pouvoir créer la réservation des produits en front*/
+	  );
+	  return $columns;
+	}
 
-/* Gestion de l'affichage des données dans les colonnes */
-function produit_custom_columns($column){
-  global $post;
-  $custom = get_post_custom();
+	/* Gestion de l'affichage des données dans les colonnes */
+	function produit_custom_columns($column){
+	  global $post;
+	  $custom = get_post_custom();
 
-  switch ($column) {
+	  switch ($column) {
 
-    case "title":
-      echo $custom[""][0];
-      break;
+	    case "title":
+	      echo $custom[""][0];
+	      break;
 
-      case "processeur":
-      // $custom = get_post_custom();
-      echo $custom["processeur_produit"][0];
-      break;
+	      case "processeur":
+	      // $custom = get_post_custom();
+	      echo $custom["processeur_produit"][0];
+	      break;
 
-      case "chipset":
-      // $custom = get_post_custom();
-      echo $custom["chipset_produit"][0];
-      break;
+	      case "chipset":
+	      // $custom = get_post_custom();
+	      echo $custom["chipset_produit"][0];
+	      break;
 
-    case "prix":
-      // $custom = get_post_custom();
-      echo $custom["prix_produit"][0];
-      break;
+	    case "prix":
+	      // $custom = get_post_custom();
+	      echo $custom["prix_produit"][0];
+	      break;
 
-    case "ram" :
-      // $custom = get_post_custom();
-      echo $custom['ram_produit'][0];
-      break;
+	    case "ram" :
+	      // $custom = get_post_custom();
+	      echo $custom['ram_produit'][0];
+	      break;
 
-    case "type":
-      echo get_the_term_list($post->ID, 'types', '', ', ','');
-      break;
+	    case "type":
+	      echo get_the_term_list($post->ID, 'types', '', ', ','');
+	      break;
 
-    case "stock" :
-      echo $custom['stock_produit'][0];
-      break;
-  }
-}
+	    case "stock" :
+	      echo $custom['stock_produit'][0];
+	      break;
+	  }
+	}
 }
