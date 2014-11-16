@@ -1,55 +1,48 @@
-<?php get_header(); ?>
+<?php get_header(); ?> 
 <script>
 jQuery(function($) {
   $('document').ready(function() {
     
     // alert(ajaxurl);
-      $.post(ajaxurl , { 'types' : '<?= $_GET["types"] ; ?>', 
+      $.post(ajaxurl , { 'type' : '<?= $_GET["types"] ; ?>', 
                          'post_type' : '<?= $_GET["post_type"]; ?>',
                          'action': 'search_produits_init',}
-
       )
 
       .done(function(data) {
         // alert(data);
-        $('.test').html(data);
+        $('.results').html(data);
         $('div.spinner').toggle();
       });
   }); /* .ready() */
 
+  /* Choix par critères */
   $('#searchform').change(function() {
       $('div.spinner').toggle();
-      $('.test').empty();
+      $('.results').empty();
+ 
       var data = {};
       var type = $('#type').val();
-      var text = $('#text').val();
+      var processeurs = $('#processeurs').val();
 
-      if (type) {
-        args.push( {
-          type: type,
-        });
-      }
+      if (type == '')
+        type = '<?= $_GET["types"]; ?>';
 
-      
-      data = { 'types' : '<?= $_GET["types"] ; ?>', 
-                         'post_type' : '<?= $_GET["post_type"]; ?>',
-                         'action': 'search_produits_init',};
-
-      $.post(ajaxurl , data
-
-      )
+      data['type'] = type;
+      data['processeurs'] = processeurs;
+      data['action'] = 'search_produits_critere';
+      data['post_type'] = '<?= $_GET["post_type"]; ?>';
+      // alert(data['types']);
+      $.post(ajaxurl , data)
 
       .done(function(data) {
-        // alert(data);
-        // .each(function(args, el) {
-        //   data += el;
-        // });
 
-        $('.test').html(data);
+        $('.results').html(data);
         
         $('div.spinner').toggle();
       });
   });
+
   $('#searchform').submit(function() {
     return false;
   });
@@ -73,7 +66,9 @@ jQuery(function($) {
     <?php //endwhile; ?>
   <?php //endif; ?>
 </div> -->
-<article class="test"></article>
+<article class="results"></article>
 <div class="fix_clear"></div>
+<?php
 
+?>
 <?php get_footer(); ?>

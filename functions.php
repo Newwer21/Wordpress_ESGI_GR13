@@ -110,7 +110,7 @@ add_action( 'wp_ajax_search_produits_init', 'search_produits_init' );
 	    global $wpdb; // this is how you get access to the database
 
 	    $home_paged = (get_query_var('paged'));
-	    $type = $_POST ['types']; 
+	    $type = $_POST ['type']; 
 
 	    $arguments = array(
 			'post_type' => $_POST['post_type'],
@@ -125,7 +125,7 @@ add_action( 'wp_ajax_search_produits_init', 'search_produits_init' );
 		<h2><?= $type; ?></h2>
 <?php while (have_posts()) : the_post(); ?>
 
-			<article class="article-<?$= $type; ?>">
+			<article class="article-<?= $type; ?>">
 			 	<h3 class="phab-name"><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h3>
 			    <p class="phab-description"><?php single_tag_title(); ?> 	<?php the_post_thumbnail('medium'); ?></p> 
 			</article>
@@ -144,9 +144,12 @@ add_action( 'wp_ajax_search_produits_init', 'search_produits_init' );
 add_action( 'wp_ajax_search_produits_critere', 'search_produits_critere' );
 
 	function search_produits_critere() {
+		$post_type = $_POST['post_type'];
+		$type = $_POST['type'];
+
 		$args = array(
-			'post_type'  => 'produits',
-			'types' => 'phablettes',
+			'post_type'  => $post_type,
+			'types' => $type,
 			'meta_query' => array(
 				'relation' => 'AND',
 				array(
@@ -165,8 +168,17 @@ add_action( 'wp_ajax_search_produits_critere', 'search_produits_critere' );
 		);
 		$query = new WP_Query( $args );
 
-		while ($query->have_posts()) : $query->the_post();
-			the_title();
-		endwhile;
+		ob_start(); 
+		while ($query->have_posts()) : $query->the_post(); ?>
+			<article class="article-<?= $type; ?>">
+			 	<h3 class="phab-name"><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h3>
+			    <p class="phab-description"><?php ?> 	<?php the_post_thumbnail('medium'); ?></p> 
+			</article>
+
+<?php 	endwhile;
+		$content = ob_get_clean();	
+		echo $content;
+
+		die;
 	}
 ?>
