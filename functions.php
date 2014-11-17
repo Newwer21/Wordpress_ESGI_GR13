@@ -181,4 +181,33 @@ add_action( 'wp_ajax_search_produits_critere', 'search_produits_critere' );
 
 		die;
 	}
+
+	/* Fonction qui permet d'afficher toutes les valeurs d'un champs personnalisé */
+function get_all_custom_fields_values($custom_field) {
+	global $wpdb;
+	$result = array();
+	$visited_values = array();
+
+	$values = $wpdb->get_col("SELECT meta_value 
+		FROM $wpdb->postmeta WHERE meta_key = '$custom_field'" );
+	
+	// var_dump($values);
+
+	for($i = 0; $i < sizeof($values) - 1; $i++)
+	{
+		if ($values[$i] != '' && (!in_array($values[$i], $visited_values)))
+		{	
+			$cpt = 0;
+			for ($j = $i; $j < sizeof($values); $j++)
+			{
+				if ($values[$j] == $values[$i])
+					$cpt++;
+			}
+
+			$result[$values[$i]] = $cpt;
+			$visited_values[] = $values[$i];
+		}
+	}
+	return $result;
+}
 ?>

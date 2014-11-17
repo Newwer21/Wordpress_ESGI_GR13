@@ -1,3 +1,43 @@
+<!-- Formulaire de recherche par critères relié à taxonomy.php -->
+<!-- Structure du formulaire :
+- 2 champs prix : prix min, prix max. Pour les 3.
+- Partie processeurs en affichant une liste checkbox des processeurs existants grâce à get_all_custom_fields_values(). PC
+- Partie Carte graphique comme processeurs PC.
+- Partie mémoire vive comme pour processeurs. Les 3
+- Choix du type produits (gamer, multimédia, Mac...) => Liste déroulante.
+... Plus d'idées...
+
+- Choix type Tablettes : Android/Windows ?/Ipad.
+
+- Choix phablettes : ...
+
+Design :
+
+Champs pri_min 	Champs prix_max
+Processeurs 
+▄ AMD
+▄ Pentium
+▄ I5
+▄ i7
+...
+
+Graphique
+▄ Nvidia
+▄ ATI
+▄ Intel
+...
+
+Mémoire vive
+▄ 2 Go
+▄ 4 Go
+▄ 6 Go
+▄ 8 Go
+▄ 16 Go
+...
+Un truc de ce genre sachant que chaque checkbox est un produit ayant au moins 
+1 de ses caractéristiques.
+
+ -->
 <form role="search" method="get" id="searchform" class="searchform" action="<?php echo esc_url( home_url( '/' ) ); ?>">
 	<aside>
 
@@ -22,34 +62,3 @@
 		<?php endif; ?>
 </aside>
 </form>
-<?php
-
-function get_all_custom_fields_values($custom_field) {
-	global $wpdb;
-	$result = array();
-	$visited_values = array();
-
-	$values = $wpdb->get_col("SELECT meta_value 
-		FROM $wpdb->postmeta WHERE meta_key = '$custom_field'" );
-	
-	// var_dump($values);
-
-	for($i = 0; $i < sizeof($values) - 1; $i++)
-	{
-		if ($values[$i] != '' && (!in_array($values[$i], $visited_values)))
-		{	
-			$cpt = 0;
-			for ($j = $i; $j < sizeof($values); $j++)
-			{
-				if ($values[$j] == $values[$i])
-					$cpt++;
-			}
-
-			$result[$values[$i]] = $cpt;
-			$visited_values[] = $values[$i];
-		}
-	}
-	return $result;
-}
-
-?>
