@@ -43,8 +43,19 @@ Un truc de ce genre sachant que chaque checkbox est un produit ayant au moins
 
 		<?php if ($_GET['types'] == 'ordinateurs') : ?>
 		
-		<?php $processeurs = get_all_custom_fields_values('processeur_produit'); ?>
+		<?php 
+			$processeurs = get_all_custom_fields_values('processeur_produit');
+			$memoires = get_all_custom_fields_values('ram_produit');
+			// var_dump($memoires);
+		?>
+		<div>
+				<label for="prix_min">Min</label>
+				<input type="text" name="prix_min" id="prix_min" size="2">
 
+				<label for="prix_max">Max</label>
+				<input type="text" name="prix_max" id="prix_max" size="2">
+		</div>
+		
 		<label for="type">Type</label>
 		<select name="type" id="type">
 			<option></option>
@@ -52,9 +63,14 @@ Un truc de ce genre sachant que chaque checkbox est un produit ayant au moins
 			<option value="multimedia">Multimédia</option>
 		</select>
 
-		<p>Processeur<p>
+		<p>Processeur</p>
 		<?php foreach ($processeurs as $key => $value) : ?>
-				<input type="checkbox" name="processeurs[]" value="<?= $key; ?>"> <?php echo $key." ($value) "; ?>
+				<p class="champs_critere"><span><input type="checkbox" name="processeurs[]" id="processeurs" value="<?= $key; ?>"> <?php echo $key." ($value) "; ?></span></p>
+		<?php endforeach; ?>
+
+		<p>Mémoire vive</p>
+		<?php foreach ($memoires as $key => $value) : ?>
+				<p class="champs_critere"><span><input type="checkbox" name="memoires_vives[]" id="memoires_vives" value="<?= $key; ?>"> <?php echo $key." Go ($value) "; ?></span></p>
 		<?php endforeach; ?>
 
 		<?php elseif ($_GET['types'] == 'tablettes') : ?>
