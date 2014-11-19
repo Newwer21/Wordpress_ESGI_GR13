@@ -4,7 +4,7 @@ add_action( 'init', 'tab_register' );
 function tab_register() {
  
 	$labels = array(
-		'name' => 'tablettes', 'post type general name',
+		'name' => 'Tablettes', 'post type general name',
 		'singular_name' => 'tablette', 'post type singular name',
 		'add_new' => 'Add New', 'portfolio item',
 		'add_new_item'> 'Add New Portfolio Item',
@@ -33,7 +33,7 @@ function tab_register() {
  	add_theme_support('post-thumbnails');
 	register_post_type( 'tablettes' , $args );
 
-	register_taxonomy("Marques", array("tablettes"), array("hierarchical" => true, "label" => "Marques", "singular_label" => "marque", "rewrite" => true));
+	register_taxonomy("marques", array("tablettes"), array("hierarchical" => true, "label" => "Marques", "singular_label" => "marque", "rewrite" => true));
 /****************************/
 }
 /* admin - personalisation  ajout produits */

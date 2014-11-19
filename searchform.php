@@ -41,7 +41,7 @@ Un truc de ce genre sachant que chaque checkbox est un produit ayant au moins
 <form role="search" method="get" id="searchform" class="searchform" action="<?php echo esc_url( home_url( '/' ) ); ?>">
 	<aside>
 
-		<?php if ($_GET['types'] == 'ordinateurs') : ?>
+		<?php if ($_GET['types'] == 'gamer') : ?>
 		
 		<?php 
 			$processeurs = get_all_custom_fields_values('processeur_produit');
@@ -65,7 +65,7 @@ Un truc de ce genre sachant que chaque checkbox est un produit ayant au moins
 
 		<p>Processeur</p>
 		<?php foreach ($processeurs as $key => $value) : ?>
-				<p class="champs_critere"><span><input type="checkbox" name="processeurs[]" id="processeurs" value="<?= $key; ?>"> <?php echo $key." ($value) "; ?></span></p>
+				<p class="champs_critere"><span><label for="processeurs"><input type="checkbox" name="processeurs[]" id="processeurs" value="<?= $key; ?>"> <?php echo $key." ($value) "; ?></label></span></p>
 		<?php endforeach; ?>
 
 		<p>Mémoire vive</p>
