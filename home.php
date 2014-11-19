@@ -13,10 +13,10 @@ Home page
 <?php
 	$home_paged = (get_query_var('paged'));
 	$arguments = array(
-	 'post_type' => 'produits',
+	 'post_type' => 'ordinateurs',
 	 'post_status' => 'publish',
-	 'types' => 'ordinateurs',
-	 'paged' => $home_paged
+/*	 'types' => 'ordinateurs',
+*/	 'paged' => $home_paged
 	);
 	query_posts($arguments);
 	
@@ -33,10 +33,11 @@ Home page
 		<section class="content-produits-tablettes">
 			<header class="content-title"><h3>Les tablettes</h3></header>
 <?php
+
+
 	$arguments = array(
-	 'post_type' => 'produits',
+	 'post_type' => 'tablettes',
 	 'post_status' => 'publish',
-	 'types' => 'tablettes',
 	 'paged' => $home_paged
 	);
 	query_posts($arguments);
@@ -55,7 +56,7 @@ Home page
 			<header class="content-title"><h3>Les phablettes</h3></header>
 <?php
 	$arguments = array(
-	 'post_type' => 'produits',
+	 'post_type' => 'tablettes',
 	 'post_status' => 'publish',
 	 'types' => 'phablettes',
 	 'paged' => $home_paged

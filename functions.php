@@ -1,4 +1,8 @@
 <?php
+	/*include_once plugin_dir_path( __FILE__ ).'/types/produits.php';*/
+	include_once plugin_dir_path( __FILE__ ).'/types/ordinateurs.php';
+	include_once plugin_dir_path( __FILE__ ).'/types/tablettes.php';
+
 	add_action('wp_enqueue_scripts', 'init_js');
 
 	function init_js()
@@ -15,7 +19,6 @@
 	</script>
 <?php 	
 	}
-	include_once plugin_dir_path( __FILE__ ).'/types/produits.php';
 	
 	add_theme_support( 'post-thumbnails', array( 'produits' ) ); 
 	
