@@ -28,9 +28,9 @@ function tab_register() {
 		'capability_type' => 'post',
 		'hierarchical' => false,
 		'menu_position' => null,
-		'supports' => array('title','thumbnail','')
+		'supports' => array('title','thumbnail')
 	  );
- 	add_theme_support('post-thumbnails');
+ 	// add_theme_support('post-thumbnails');
 	register_post_type( 'tablettes' , $args );
 
 	register_taxonomy("marques", array("tablettes"), array("hierarchical" => true, "label" => "Marques", "singular_label" => "marque", "rewrite" => true));
@@ -67,7 +67,7 @@ function tab_register() {
 	  $os_ordi = $custom["os_ordi"][0] ;
 	  $poids_ordi = $custom["poids_ordi"][0] ;
 	  $resolution_ordi = $custom["resolution_ordi"][0];*/
-	  var_dump($custom);
+	  // var_dump($custom);
 	   echo '<table>
 	   <tr>
 	   				<td>
@@ -111,7 +111,7 @@ function tab_register() {
 	}
 
 add_action('save_post', 'save_tab');
-	function save_tab($post_ID){
+	function save_tab(){
 
 	  update_post_meta($post->ID, "constructeur_tablette", intval($_POST["constructeur_tablette"]));
 	  update_post_meta($post->ID, "os_tablette", sanitize_text_field($_POST["os_tablette"]));
@@ -155,8 +155,9 @@ function tab_custom_columns($column){
       echo $custom["prix_ordi"][0];
       break;
     case "skills":
-      echo get_the_term_list($post->ID, 'types', '', ', ','');
+      echo get_the_term_list($post->ID, 'marques', '', ', ','');
       break;
   }
 }
+
 ?>

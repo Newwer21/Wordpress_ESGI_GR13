@@ -42,7 +42,7 @@ function ordi_register() {
 		'menu_position' => null,
 		'supports' => array('title','thumbnail')
 	  );
- 	add_theme_support('post-thumbnails');
+ 	// add_theme_support('post-thumbnails');
 	register_post_type( 'ordinateurs' , $args );
 	register_taxonomy("types", array("ordinateurs"), array("hierarchical" => true, "label" => "Types", "singular_label" => "type", "rewrite" => true));
 

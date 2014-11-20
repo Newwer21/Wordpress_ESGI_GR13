@@ -2,8 +2,9 @@
 	/*include_once plugin_dir_path( __FILE__ ).'/types/produits.php';*/
 	include_once plugin_dir_path( __FILE__ ).'/types/ordinateurs.php';
 	include_once plugin_dir_path( __FILE__ ).'/types/tablettes.php';
-	include_once plugin_dir_path(__FILE__ ).'/widget.php';
-	
+	include_once plugin_dir_path(__FILE__ ).'/widget-recherche-criteres.php';
+		include_once plugin_dir_path(__FILE__ ).'/widget-menu.php';
+
 	add_action('wp_enqueue_scripts', 'init_js');
 
 	function init_js()
@@ -21,7 +22,7 @@
 <?php 	
 	}
 	
-	add_theme_support( 'post-thumbnails', array( 'produits' ) ); 
+	add_theme_support( 'post-thumbnails', array( 'ordinateurs', 'tablettes' ) ); 
 	
 	add_action( 'wp_enqueue_scripts', 'include_style' );
 
