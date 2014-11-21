@@ -47,7 +47,6 @@ class Theme_Menu extends WP_Widget {
 		{
 			$checked ="checked";
 		}
-
 	   echo '<p> <input type="checkbox" name="'.$this->get_field_name($post_type).'" id="'.$this->get_field_id($post_type).'"'. $checked .' ><label for="'.$this->get_field_id($post_type).'">' . $post_type . '</label></p>';
 	}
 

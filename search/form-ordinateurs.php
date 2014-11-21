@@ -25,3 +25,5 @@
 		<?php foreach ($memoires as $key => $value) : ?>
 				<p class="champs_critere"><span><input type="checkbox" name="memoires_vives[]" id="memoires_vives" value="<?= $key; ?>"> <?php echo $key." Go ($value) "; ?></span></p>
 		<?php endforeach; ?>
+
+		
