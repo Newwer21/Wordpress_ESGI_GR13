@@ -3,7 +3,8 @@
 	include_once plugin_dir_path( __FILE__ ).'/types/ordinateurs.php';
 	include_once plugin_dir_path( __FILE__ ).'/types/tablettes.php';
 	include_once plugin_dir_path(__FILE__ ).'/widget-recherche-criteres.php';
-		include_once plugin_dir_path(__FILE__ ).'/widget-menu.php';
+	include_once plugin_dir_path(__FILE__ ).'/widget-menu.php';
+	include_once plugin_dir_path(__FILE__ ).'/search/functions.php'; // Function pour la recherche par critères.
 
 	add_action('wp_enqueue_scripts', 'init_js');
 
@@ -105,114 +106,4 @@ function remove_menu_items() {
 
 add_action('admin_menu', 'remove_menu_items');
 
-/* Fonction Ajax permettant l'affichage Produit à l'appel 
-d'une catégorie par défaut (sans choix critère)
-*/
-
-add_action( 'wp_ajax_search_produits_init', 'search_produits_init' );
-
-	function search_produits_init() {
-	    global $wpdb; // this is how you get access to the database
-
-	    $home_paged = (get_query_var('paged'));
-	    $type = $_POST ['type']; 
-
-	    $arguments = array(
-			'post_type' => $_POST['post_type'],
-			'post_status' => 'publish',
-			'types' => $type,
-			'paged' => $home_paged
-		);
-
-		query_posts($arguments);
-
-		ob_start(); ?>
-		<h2><?= $type; ?></h2>
-<?php while (have_posts()) : the_post(); ?>
-
-			<article class="article-<?= $type; ?>">
-			 	<h3 class="phab-name"><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h3>
-			    <p class="phab-description"><?php single_tag_title(); ?> 	<?php the_post_thumbnail('medium'); ?></p> 
-			</article>
-<?php endwhile; ?>
-			<div class="fix_clear"></div>
-		</section> <!-- .content-produits-phablettes -->
-	</article> <!-- .content-produit -->
-<?php $content = ob_get_clean(); 
-		echo $content;
-
-	    die(); // this is required to return a proper result
-	}
-
-/* Fonction Ajax permettant l'affichage Produit après modification de critère */
-
-add_action( 'wp_ajax_search_produits_critere', 'search_produits_critere' );
-
-	function search_produits_critere() {
-		$post_type = $_POST['post_type'];
-		$type = $_POST['type'];
-
-		$args = array(
-			'post_type'  => $post_type,
-			'types' => $type,
-			'meta_query' => array(
-				'relation' => 'AND',
-				array(
-					'key'     => 'processeur_produit',
-					'value'   => 'Proc',
-					'compare' => '=',
-				),
-				array(
-					'key'     => 'prix_produit',
-					'value'   => array( 20, 300 ),
-					'type'    => 'numeric',
-					'compare' => 'BETWEEN',
-				),
-			),
-			
-		);
-		$query = new WP_Query( $args );
-
-		ob_start(); 
-		while ($query->have_posts()) : $query->the_post(); ?>
-			<article class="article-<?= $type; ?>">
-			 	<h3 class="phab-name"><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h3>
-			    <p class="phab-description"><?php ?> 	<?php the_post_thumbnail('medium'); ?></p> 
-			</article>
-
-<?php 	endwhile;
-		$content = ob_get_clean();	
-		echo $content;
-
-		die;
-	}
-
-	/* Fonction qui permet d'afficher toutes les valeurs d'un champs personnalisé */
-function get_all_custom_fields_values($custom_field) {
-	global $wpdb;
-	$result = array();
-	$visited_values = array();
-
-	$values = $wpdb->get_col("SELECT meta_value 
-		FROM $wpdb->postmeta WHERE meta_key = '$custom_field'" );
-	
-	// var_dump($values);
-
-	for($i = 0; $i < sizeof($values) - 1; $i++)
-	{
-		if ($values[$i] != '' && (!in_array($values[$i], $visited_values)))
-		{	
-			$cpt = 0;
-			for ($j = $i; $j < sizeof($values); $j++)
-			{
-				if ($values[$j] == $values[$i])
-					$cpt++;
-			}
-
-			$result[$values[$i]] = $cpt;
-			$visited_values[] = $values[$i];
-		}
-	}
-	return $result;
-}
 ?>

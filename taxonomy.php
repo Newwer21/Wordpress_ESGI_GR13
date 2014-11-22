@@ -1,12 +1,32 @@
 <?php get_header(); ?> 
 <script>
 jQuery(function($) {
+
+
+  var post_type = '';
+    var categorie = '<?= $_GET["types"]; ?>';
+
+    if (categorie)
+    {
+      post_type = 'ordinateurs';
+      lib_categorie = 'types';
+      
+    }
+    else if (categorie = '<?= $_GET["marques"]; ?>')
+    {
+      lib_categorie = 'marques';
+      post_type = 'tablettes';
+    }
+
   $('document').ready(function() {
+
+    // alert('type ' + categorie + ' ' + post_type);
     
     // alert(ajaxurl);
-      $.post(ajaxurl , { 'type' : '<?= $_GET["types"] ; ?>', 
-                         'post_type' : '<?= $_GET["post_type"]; ?>',
-                         'action': 'search_produits_init',}
+      $.post(ajaxurl , { 'type' : categorie,
+                         'post_type' : post_type,
+                          lib_categorie : lib_categorie,
+                         'action': 'search_produits_init'}
       )
 
       .done(function(data) {
@@ -17,7 +37,7 @@ jQuery(function($) {
   }); /* .ready() */
 
   /* Choix par critères */
-  $('#searchform').change(function() {
+  $('#search_form').change(function() {
 
       $('div.spinner').toggle();
       $('#search_critere').empty();
@@ -88,11 +108,16 @@ jQuery(function($) {
       if (type == '')
         type = '<?= $_GET["types"]; ?>';
 
-      data['type'] = type;
+
+
+      data['lib_categorie'] = lib_categorie;
+      data['type'] = categorie;
       data['processeurs'] = tab_processeurs;
+      data['memoires_vives'] = tab_memoire_vive;
       data['action'] = 'search_produits_critere';
       data['post_type'] = '<?= $_GET["post_type"]; ?>';
-      // alert(data['types']);
+      // alert(categorie);
+
       $.post(ajaxurl , data)
 
       .done(function(data) {
@@ -103,7 +128,7 @@ jQuery(function($) {
       });
   });
 
-  $('#searchform').submit(function() {
+  $('#search_form').submit(function() {
     return false;
   });
 });
@@ -114,23 +139,16 @@ jQuery(function($) {
 	In taxonomy pages..
   <div class="fix_clear"></div>
   <div class="spinner"></div>
-  <!-- <label for="name">Name</label><input type="text" name="name"> -->
-  <!-- <h1>Produits concernant : <?php single_cat_title(); ?></h1>
-  <div class="clear_fix"></div>
-  <?php //if (have_posts()) : ?>
-    <?php //while (have_posts()) : the_post(); ?>
-      <div class="content-produits">
-        <h3 class="project-name"><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h3>
-        <p class="project-description"><?php //the_post_thumbnail("medium"); ?></p>
-        <?php the_category(); ?> 
-      </div>
-    <?php //endwhile; ?>
-  <?php //endif; ?>
-</div> -->
+ 
 <div id="search_critere"></div>
-<article class="results"></article>
+<article class="results">
+</article>
 <div class="fix_clear"></div>
+
+
 <?php
 
+
 ?>
+
 <?php get_footer(); ?>

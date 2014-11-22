@@ -93,7 +93,7 @@ class Theme_Menu extends WP_Widget {
       $html .= '<ul>';
 
       foreach ($tax_terms as $tax_term) {
-  			$html .= '<li><a href="' . esc_attr(get_term_link($tax_term, $taxonomy)) . '" title="' . sprintf( __( "View all posts in %s" ), $tax_term->name ) . '" ' . '>' . $tax_term->name.'</a></li>';
+  			$html .= '<li><a href="' . esc_attr(get_term_link($tax_term, $taxonomy)).'&post_type='. $post_type . '" title="' . sprintf( __( "View all posts in %s" ), $tax_term->name ) . '" ' . '>' . $tax_term->name.'</a></li>';
   		}
 
       $html .= '</ul>';

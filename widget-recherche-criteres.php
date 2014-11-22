@@ -33,7 +33,7 @@ class Search_Criteres extends WP_Widget {
 
 	function widget($args, $instance) {
 
-		$infos = $this->get_taxonomy_for_post_types();
+		$infos = get_taxonomy_for_post_types();
 		
 		// var_dump($infos);
 
@@ -47,6 +47,7 @@ class Search_Criteres extends WP_Widget {
 				if (isset($_GET[$value]))
 				{
 					$post_type = $key;
+					$lib_post_type = $value;
 				}
 			}
 
@@ -74,28 +75,6 @@ class Search_Criteres extends WP_Widget {
 		echo $after_widget;
 	}
 
-	function get_taxonomy_for_post_types() {
-
-		// $infos = array();
-		$post = array();
-
-		$terms_args = array('hide_empty' => false);
-		$args_posts = array('_builtin' => false);
-
-		$post_types = get_post_types($args_posts, 'names');
-
-		foreach ($post_types as $post_type) {
-
-			$taxonomy = get_object_taxonomies($post_type);
-
-			$post[$post_type] = $taxonomy[0];
-			// $infos[] = $post;
-			
-		}
-		// var_dump($post);
-
-		return $post;
-	}
 
 
 }

@@ -17,25 +17,7 @@
         </div>
       </div>
     <?php endwhile; ?>
-
-     <input type="button" value="reserver ?" class="but-res" />
-
-    <div id="reservation">
-      <?php include_once plugin_dir_path(__FILE__ ).'/reservationform.php'; ?>
-    </div>
-
   <?php endif; ?>
 </div>
 
 <?php get_footer(); ?>
-
-<script type="text/javascript">
-jQuery(document).ready(function($) {
-
-  $('#reservation').hide();
-  $('.but-res').click( function() {
-    $('#reservation').toggle('slow'); 
-});
-
-})
-</script>
