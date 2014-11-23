@@ -69,6 +69,21 @@ Template Name: ordinateurs
       </div>
     <?php endwhile; ?>
   <?php endif; ?>
-</div>
 
+ <!-- form reservation -widget -->
+ <input type="button" value="reserver ?" class="but-res" />
+  <div id="reservation">
+    <?php include_once plugin_dir_path(__FILE__ ).'/reservationform.php'; ?>
+  </div>
+<!--  -->
 <?php get_footer(); ?>
+
+<!-- script form reservation -WIDGET -->
+<script type="text/javascript">
+jQuery(document).ready(function($) {
+  $('#reservation').hide();
+  $('.but-res').click( function() {
+    $('#reservation').toggle('slow'); 
+});
+})
+</script>

@@ -103,7 +103,54 @@ function remove_menu_items() {
       	}
   	}
 }
-
 add_action('admin_menu', 'remove_menu_items');
+
+/*----------------------------------------------Formulaire reservation------------------------------------------------*/
+add_action( 'wp_ajax_valid_form_res', 'valid_form_resfunction' );
+/*add_action( 'wp_ajax_nopriv_valid_form_res', 'valid_form_resfunction' );
+*/
+	function valid_form_resfunction() {
+		global $wpdb;
+$nom = $_POST['name'];
+$email = $_POST['email'];
+$idpost = $_POST['idPost'];
+$date = date('Y-m-d H:i:s' ,mktime(date("H"),date("i"),date("s"),date("m"),date("d"),date("Y")));
+
+// reservationTable(); 
+$result = $wpdb->insert('wp_reservation',
+		array('nom_res' => $nom,
+			'mail_res' => $email,
+			'post_id' => $idpost,
+			'date_res' => $date,
+			'val_res' => false),
+		array('%s','%s','%d')
+	);
+if ($result === false){ echo "fail";} 
+if ($result === 0) { echo "no insert";}
+if ($result > 0) {echo "insert";}
+	die(); 
+}
+//creation table wp_reservation
+function reservationTable(){
+$reservation = $wpdb->prefix . "reservation";
+
+if($wpdb->get_var('SHOW TABLE LIKE' . $reservation ) != $reservation)
+{
+$sql = 'CREATE TABLE ' .$reservation. '(
+id_res INTEGER(20) NOT NULL AUTO_INCREMENT,
+post_id INTEGER(20) NOT NULL,
+nom_res VARCHAR( 20 ) NOT NULL,
+mail_res VARCHAR(60) NOT NULL,
+date_res VARCHAR(60) NOT NULL,
+val_res BOOLEAN NOT NULL,
+UNIQUE KEY id_res (id_res)
+)Engine=INNODB';
+}
+require_once(ABSPATH . 'wp_admin/includes/upgrade.php');
+dbDelta( $sql );
+}
+
+
+/* ------------------------------------------------------------------------------------------------------ */
 
 ?>

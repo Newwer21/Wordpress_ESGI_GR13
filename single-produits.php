@@ -6,7 +6,7 @@ Template Name: Produits
 <?php get_header(); ?>
 <?php get_sidebar(); ?>
 <div class="main single-produits">
-  template produits
+  template tablettes
   <?php if (have_posts()) : ?>
     <?php while (have_posts()) : the_post(); ?>
     <?php

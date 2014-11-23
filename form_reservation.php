@@ -68,7 +68,6 @@
       <input id="subres" class="subres" type="submit" value="Effectuer la réservation" /> 
     </form>
     <script>
-
     jQuery(document).ready(function($) {
 /*        $("#formRes").submit(function() {
 */          $.post(ajaxurl , { 'name' : '<?= $_POST["full_name"] ; ?>', 
@@ -99,4 +98,5 @@
         input.setCustomValidity('');
       }
     }
+
 </script>
