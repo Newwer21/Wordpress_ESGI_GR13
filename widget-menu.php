@@ -28,7 +28,7 @@ class Theme_Menu extends WP_Widget {
  
  function form ($instance) {
 
- 	echo 'instance : '.var_dump($instance);
+ 	// echo 'instance : '.var_dump($instance);
 
  	$instance = wp_parse_args( (array) $instance, $defaults ); 
  	

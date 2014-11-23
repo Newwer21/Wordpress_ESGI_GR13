@@ -75,8 +75,6 @@ class Search_Criteres extends WP_Widget {
 		echo $after_widget;
 	}
 
-
-
 }
 function init_search_critere_widget() {
 

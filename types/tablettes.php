@@ -130,7 +130,7 @@ function tab_edit_columns($columns){
     "title" => "Nom produit",
     "processeur" => "Processeur",
     "chipset" => "Chipset",
-    "prix" => "Prix",
+    "prix" => "Prix"
   );
   return $columns;
 }

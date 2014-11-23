@@ -63,97 +63,169 @@
 
 	/* Fonction Ajax permettant l'affichage Produit après modification de critère */
 
-	add_action( 'wp_ajax_search_produits_critere', 'search_produits_critere' );
+	add_action( 'wp_ajax_search_produits_criteres', 'search_produits_criteres' );
 
-		function search_produits_critere() {
+		function search_produits_criteres() {
+
+			global $wpdb, $post;
 			$post_type = $_POST['post_type'];
+
 			$type = $_POST['type'];
-			$taxonomy = $_POST['lib_categorie'];
-			$meta_relation_criteres = array();
-
-			$tab_processeurs = isset($_POST['processeurs']) ? $_POST['processeurs'] : array();
-			$tab_memoires_vives = isset($_POST['memoires_vives']) ? $_POST['memoires_vives'] : array();
-
-			$array_processeurs = array();
-			$array_memoires_vives = array();
-
-			// $meta = array();
-			$meta_relation_processeurs['relation'] = 'AND'; // 1ère meta avec les criteres
-
-			if (sizeof($tab_processeurs) != 0)
+			// Partie ordinateurs
+			if ( $post_type != 'ordinateurs' && $post_type != 'tablettes' )
 			{
-				foreach ($tab_processeurs as $process) {
-					$array_processeurs['key'] = 'processeur_ordinateur';
-					$array_processeurs['value'] = $process;
-					$array_processeurs['compare'] = '=';
-
-					$meta_relation_processeurs[] = $array_processeurs;
-				}
-				
+				echo 'KO';
+				return;
 			}
-			$meta_relation_ram['relation'] = 'AND';
-			if (sizeof($tab_memoires_vives) != 0)
+
+			if ($post_type == 'ordinateurs')
 			{
-				foreach ($tab_memoires_vives as $ram) {
-					$array_memoires_vives['key'] = 'ram_ordinateur';
-					$array_memoires_vives['value'] = $ram;
-					$array_memoires_vives['compare'] = '=';
+				// echo 'iici';
+				$col = 'ordinateur';
+				$tab_processeurs = !empty($_POST['processeurs']) ? $_POST['processeurs'] : array();
+				$tab_memoires_ram = !empty($_POST['memoires_vives']) ? $_POST['memoires_vives'] : array();
+				$tab_constructeurs = !empty($_POST['constructeurs']) ? $_POST['constructeurs'] : array();
+
+				// $taxonomy = $_POST['lib_categorie'];
+
+				// SELECT * FROM `wp_ordinateurs` 
+				// where (constructeur_ordinateur = 'samsung' OR constructeur_ordinateur = 'lenovo')
+				// AND (ram_ordinateur = 6 OR ram_ordinateur = 4)
+				// AND (processeur_ordinateur = 'intel' OR processeur_ordinateur = 'amd' OR processeur_ordinateur = 'proc')
+				// AND (dd_ordinateur = 700)
+
+				// print_r($tab_processeurs);
+
+				$table = $wpdb->prefix. "$post_type ";
+
+				$sql = "SELECT id_post FROM $table";
 				
-				$meta_relation_processeurs[] = $array_memoires_vives;
-				}
+				// print_r($_POST);
 
-			}
-			// $meta_relation[] = $meta_relation_criteres;
+				// SQL processeur
+				$taille = sizeof($tab_processeurs);
 
-			$meta_relation[] = $meta_relation_processeurs;
-			// $meta_relation[] = $meta_relation_ram;
-			/* Prix à la fin ! */
-			$array_prix = array('key' => 'prix_ordinateur', 'value' => array(20,300), 'type' => 'numeric', 'compare' => 'BETWEEN');
+				if (!empty($taille))
+				{
+					$sql .= where_or_and($sql); // Where ou and ?
 
-			// $meta_relation[] = $array_prix;
-			// $meta_relation[] = $array_memoires_vives;
-			$meta = $meta_relation;
+					if (sizeof($tab_processeurs) == 1)
+					{
+						// echo '<br />seul';
+						$sql .= " processeur_$col = '$tab_processeurs[0]'";
+					}
+					else
+					{
+						echo 'Pas seul';
+						$sql .= "(";
+							$processeurs_sql = '';
+						foreach ($tab_processeurs as $process) {
+							$processeurs_sql .= " processeur_$col = '$process' OR";
+						}
+						// $pos_dern_or = srtchr($processeurs_sql, 'OR');
+						$processeurs_sql = substr($processeurs_sql, 0, strlen($processeurs_sql) - 2);
 
-			$args = array(
-				'post_type'  => $post_type,
-				 $taxonomy => $type,
-				// 'meta_query' => array(
-				// 	'relation' => 'OR',
-				// 	// $meta_processeurs
-				// 	$array_processeurs
-				 'meta_query' => $meta
-			 	   //  array (
-			 	   	//  'key' 	=> 'processeur_ordinateur',
-			 	   	//  'value' =>	'Intel',
-			 	   	//  'compare' => '=',
-			 	   //  ),
-					// array(
-					// 	'key'     => 'prix_produit',
-					// 	'value'   => array( 20, 300 ),
-					// 	'type'    => 'numeric',
-					// 	'compare' => 'BETWEEN',
-					// ),
-				// ),
+						$sql .= "$processeurs_sql ) ";
+					}
+				}// if !empty $taille
+
+				// SQL constructeurs
+				$taille = sizeof($tab_constructeurs);
+
+				if (!empty($taille))
+				{
+					$sql .= where_or_and($sql); // Where ou and ?
+					
+					if (sizeof($tab_constructeurs) == 1)
+					{
+						// echo '<br />seul';
+						$sql .= " constructeur_$col = '$tab_constructeurs[0]'";
+					}
+					else
+					{
+						// echo 'Pas seul';
+						$sql .= "(";
+						$constructeurs_sql = '';
+						
+						foreach ($tab_constructeurs as $construct) {
+							$constructeurs_sql .= " constructeur_$col = '$construct' OR";
+						}
+						// $pos_dern_or = srtchr($processeurs_sql, 'OR');
+						$constructeurs_sql = substr($constructeurs_sql, 0, strlen($constructeurs_sql) - 2);
+
+						$sql .= "$constructeurs_sql ) ";
+					}
+				} // if !empty $taille
+
+				// SQL memoire vive
+				$taille = sizeof($tab_memoires_ram);
 				
-			);
+				if (!empty($taille))
+				{
+					$sql .= where_or_and($sql); // Where ou and ?
+					if (sizeof($tab_memoires_ram) == 1)
+					{
+						// echo '<br />seul';
+						$sql .= " ram_$col = $tab_memoires_ram[0]";
+					}
+					else
+					{
+						// echo 'Pas seul';
+						$sql .= "(";
+						$ram_sql = '';
+						
+						foreach ($tab_memoires_ram as $ram) {
+							$ram_sql .= " ram_$col = $ram OR";
+						}
+						// $pos_dern_or = srtchr($processeurs_sql, 'OR');
+						$ram_sql = substr($ram_sql, 0, strlen($ram_sql) - 2);
 
-			print_r($args);
+						$sql .= "$ram_sql ) ";
+					}
+				}// if !empty $taille
 
-			// die;
-			$query = new WP_Query( $args );
+				echo $sql .= " AND type_$col = '$type';";
+			} // if $post_type == ordinateurs
+			else if ($post_type == 'tablettes')
+			{
 
-			ob_start(); 
-			while ($query->have_posts()) : $query->the_post(); ?>
-				<article class="article-<?= $type; ?>">
-				 	<h3 class="phab-name"><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h3>
-				    <p class="phab-description"><?php the_post_thumbnail('medium'); ?></p> 
-				</article>
 
-	<?php 	endwhile;
-			$content = ob_get_clean();	
-			echo $content;
+			}	
+			// echo $sql;
 
-			die;
+			$results = $wpdb->get_results($sql, OBJECT );
+
+			// ob_start();
+
+			foreach ($results as $sql_post) :
+
+				$post = get_post($sql_post->id_post); // Récupration du post
+				setup_postdata($post); // Récupréation des infos pour The Loop. ?>
+
+				<div class="resultat">
+					<div class="title_resultat"><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></div>
+					<div class="image_resultat"><?php the_post_thumbnail('medium' ); ?></div>
+					<div class="description_resultat"><?php the_excerpt(); ?></div>
+				</div>
+
+			<?php // print_r($post);
+			endforeach;
+
+			// $content = ob_get_clean(); 
+			// echo $content;
+			// print_r($results);
+			die; // Nécéssaire !
+				
+		}	
+
+		/* Renvoie where ou and pour créer la requete SQL */
+		function where_or_and($chaine) {
+
+			if (strstr($chaine, "WHERE") === false)
+
+				return "WHERE";
+			else
+				return "AND";
 		}
 
 	/* Fonction qui permet d'afficher toutes les valeurs d'un champs personnalisé */

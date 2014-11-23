@@ -57,24 +57,23 @@ function ordi_register() {
 	
 	  /* Source : http://wabeo.fr/jouons-avec-les-meta-boxes/ */
 	  $custom = get_post_custom($post->ID);
-
+	  
 	  $constructeur_ordinateur = $custom["constructeur_ordinateur"][0];
 	  $prix_ordinateur = $custom['prix_ordinateur'][0];
 	  $processeur_ordinateur = $custom["processeur_ordinateur"][0] ;
 	  $chipset_ordinateur = $custom["chipset_ordinateur"][0] ;
 	  $ram_ordinateur = $custom["ram_ordinateur"][0] ;
 	  $dd_ordinateur = $custom["dd_ordinateur"][0];
-	  $tactile_ordinateur = $custom["tactile_ordinateur"][0] ;
+	  $tactile_ordinateur = $custom["tactile_ordinateur"][0] == 1 ? 'Oui' : 'Non';
 	  $os_ordinateur = $custom["os_ordinateur"][0] ;
 	  $poids_ordinateur = $custom["poids_ordinateur"][0] ;
 	  $resolution_ordinateur = $custom["resolution_ordinateur"][0];
 
-	  
 	 	// var_dump($custom);
 
 	   echo '<table>
 	   				<td>
-		   				<label for="constructeur_ordinateur">constructeur </label>
+		   				<label for="constructeur_ordinateur">Constructeur </label>
 		   				<input type="text" id="constructeur_ordinateur" name="constructeur_ordinateur" placeholder="'.$constructeur_ordinateur.'" value="'.$constructeur_ordinateur.'">
 		   			</td>
 	   			</tr>
@@ -124,7 +123,7 @@ function ordi_register() {
 	   			<tr>
 	   				<td>
 		   				<label for="poids_ordinateur">Poids </label>
-		   				<input type="text" id="poids_ordnateurinateur" name="poids_ordinateur" placeholder="'.$poids_ordi.'" value="'.$poids_ordi.'">
+		   				<input type="text" id="poids_ordnateurinateur" name="poids_ordinateur" placeholder="'.$poids_ordinateur.'" value="'.$poids_ordinateur.'">
 		   			</td>
 	   			</tr>
 	   			<tr>
@@ -140,25 +139,102 @@ function ordi_register() {
 
 	add_action('save_post', 'save_details');
 	function save_details(){
-	  global $post;
+	  global $post, $wpdb;
+
+	  if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE)
+
+        return;
+
 	/*  update_post_meta($post->ID, "prix_ordinateur", intval($_POST["prix_ordinateur"]));
 	  update_post_meta($post->ID, "processeur_ordinateur", sanitize_text_field($_POST["processeur_ordinateur"]));
 	  update_post_meta($post->ID, "chipset_produit", sanitize_text_field($_POST["chipset_produit"]));
 	  update_post_meta($post->ID, "ram_produit", intval($_POST["ram_produit"]));
 	  update_post_meta($post->ID, "stock_produit", intval($_POST["stock_produit"]));*/
+	  if (empty($_POST["constructeur_ordinateur"]) || 
+	  	  empty($_POST["prix_ordinateur"]) ||
+	  	  empty($_POST["processeur_ordinateur"]) ||
+	  	  empty($_POST["ram_ordinateur"]) ||
+	  	  empty($_POST["chipset_ordinateur"]) ||
+	  	  empty($_POST["dd_ordinateur"]) ||
+	  	  empty($_POST["os_ordinateur"]) ||
+	  	  empty($_POST["chipset_ordinateur"]) ||
+	  	  empty($_POST["resolution_ordinateur"])
+	  	 )
+	  	return;
+	 	
+	  $constructeur_ordinateur = strtolower(sanitize_text_field($_POST["constructeur_ordinateur"]));
+	
+	  $prix_ordinateur = intval($_POST["prix_ordinateur"]);
+	  $processeur_ordinateur = strtolower(sanitize_text_field($_POST["processeur_ordinateur"]));
+	  $ram_ordinateur = sanitize_text_field($_POST["ram_ordinateur"]);
+	  $chipset_ordinateur = strtolower(sanitize_text_field($_POST["chipset_ordinateur"]));
+	  $dd_ordinateur = sanitize_text_field($_POST["dd_ordinateur"]);
+	  $tactile_ordinateur = intval($_POST["tactile_ordinateur"]);
+	  $os_ordinateur = strtolower(sanitize_text_field($_POST["os_ordinateur"]));
+	  $poids_ordinateur = $_POST["poids_ordinateur"];
+	  $resolution_ordinateur = intval(($_POST["resolution_ordinateur"]));
 
-	  update_post_meta($post->ID, "constructeur_ordinateur", sanitize_text_field($_POST["constructeur_ordinateur"]));
-	  update_post_meta($post->ID, "prix_ordinateur", intval($_POST["prix_ordinateur"]));
-	  update_post_meta($post->ID, "processeur_ordinateur", sanitize_text_field($_POST["processeur_ordinateur"]));
-	  update_post_meta($post->ID, "ram_ordinateur", sanitize_text_field($_POST["ram_ordinateur"]));
-	  update_post_meta($post->ID, "chipset_ordinateur", intval($_POST["chipset_ordinateur"]));
-	  update_post_meta($post->ID, "dd_ordinateur", sanitize_text_field($_POST["dd_ordinateur"]));
-	  update_post_meta($post->ID, "tactile_ordinateur", intval($_POST["tactile_ordinateur"]));
-	  update_post_meta($post->ID, "os_ordinateur", sanitize_text_field($_POST["os_ordinateur"]));
-	  update_post_meta($post->ID, "poids_ordinateur", sanitize_text_field($_POST["poids_ordinateur"]));
-	  update_post_meta($post->ID, "resolution_ordinateur", intval($_POST["resolution_ordinateur"]));
+	  // Mise a jour post meta
+	  update_post_meta($post->ID, "constructeur_ordinateur", $constructeur_ordinateur);
+	  update_post_meta($post->ID, "prix_ordinateur", $prix_ordinateur);
+	  update_post_meta($post->ID, "processeur_ordinateur", $processeur_ordinateur);
+	  update_post_meta($post->ID, "ram_ordinateur", $ram_ordinateur);
+	  update_post_meta($post->ID, "chipset_ordinateur", $chipset_ordinateur);
+	  update_post_meta($post->ID, "dd_ordinateur", $dd_ordinateur);
+	  update_post_meta($post->ID, "tactile_ordinateur", $tactile_ordinateur);
+	  update_post_meta($post->ID, "os_ordinateur", $os_ordinateur );
+	  update_post_meta($post->ID, "poids_ordinateur", $poids_ordinateur);
+	  update_post_meta($post->ID, "resolution_ordinateur", $resolution_ordinateur);
 
+	  /* ajout sur table wp_ordinateurs */
+	  $table = $wpdb->prefix. 'ordinateurs';
+
+	  $terms = get_the_terms( $post->ID, 'types' );
+	  $term = $terms[0]->slug;
+	  /* vérification si existe une ligne de post */
+	  $exist = $wpdb->get_row("SELECT * FROM $table WHERE id_post = $post->ID;");
+// var_dump($exist);
+	  if (isset($exist->id_ordinateur))
+	  {
+	  	$wpdb->query("UPDATE $table 
+	   						SET type_ordinateur = '$term',
+	   							constructeur_ordinateur = '$constructeur_ordinateur',
+	   							prix_ordinateur = $prix_ordinateur,
+	   							processeur_ordinateur = '$processeur_ordinateur',
+	   							ram_ordinateur = $ram_ordinateur,
+	   							chipset_ordinateur = '$chipset_ordinateur',
+	   							dd_ordinateur = $dd_ordinateur,
+	   							tactile_ordinateur= $tactile_ordinateur,
+	   							os_ordinateur = '$os_ordinateur',
+	   							poids_ordinateur = $poids_ordinateur,
+	   							resolution_ordinateur = $resolution_ordinateur
+	   						WHERE id_post = $post->ID;");
+	  	// $wpdb->show_errors();
+	  	// exit( var_dump( $wpdb->last_query ) );
+	  }
+	  else
+	  {
+		   $wpdb->insert($table,
+			  	array(
+			  		'type_ordinateur'		 	=> $term,
+			  		'constructeur_ordinateur' 	=> $constructeur_ordinateur,
+			   		'prix_ordinateur' 		  	=> $prix_ordinateur,
+			   		'processeur_ordinateur'   	=> $processeur_ordinateur,
+			   		'ram_ordinateur' 		  	=> $ram_ordinateur,
+			   		'chipset_ordinateur'      	=> $chipset_ordinateur,
+			   		'dd_ordinateur' 		  	=> $dd_ordinateur,
+			   		'tactile_ordinateur' 	  	=> $tactile_ordinateur,
+			   		'os_ordinateur' 	  	  	=> $os_ordinateur,
+			   		'poids_ordinateur' 		  	=> $poids_ordinateur,
+			   		'resolution_ordinateur'   	=> $resolution_ordinateur,
+			   		'id_post' 		  		  	=> $post->ID
+
+			   	),
+			  	array('%s', '%s', '%d', '%s', '%d', '%s', '%d', '%d', '%s', '%f', '%f', '%d')
+			);
+		}
 	}
+
 	/* META_BOX PRODUITS */
 
 	add_action("manage_posts_custom_column",  "ordi_custom_columns");

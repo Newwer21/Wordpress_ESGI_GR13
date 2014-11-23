@@ -3,7 +3,7 @@
 jQuery(function($) {
 
 
-  var post_type = '';
+    var post_type = '';
     var categorie = '<?= $_GET["types"]; ?>';
 
     if (categorie)
@@ -47,11 +47,16 @@ jQuery(function($) {
       var rech_criteres = '';
       var rech_processeurs = '';
       var rech_memoire_vive = '';
+      var rech_constructeurs = '';
+      var rech_systemes_exp = '';
+
       var data = {};
       var type = $('#type').val();
 
       var tab_processeurs = [];
       var tab_memoire_vive = [];
+      var tab_constructeurs = [];
+      var tab_systemes_exp = [];
       
       var prix_min = $('#prix_min').val();
       var prix_max = $('#prix_max').val();
@@ -60,9 +65,11 @@ jQuery(function($) {
 
       if (prix_min) {
         rech_criteres += '<p>De ' + prix_min + '€';
+        data['prix_min'] = prix_min;
       }
 
       if (prix_max) {
+        data['prix_max'] = prix_max;
         rech_criteres += ' à ' + prix_max + '€';
       }
 
@@ -71,6 +78,34 @@ jQuery(function($) {
       if (type) 
       {
         rech_criteres += '<p>Catégorie : ' + type + '</p>';
+      }
+
+      $('#constructeurs:checked').each(function() {
+        rech_constructeurs += $(this).val() + ', ';
+        tab_constructeurs.push($(this).val());
+        cpt_check++;
+      });
+
+      if (cpt_check > 0)
+      {
+        rech_criteres += '<p>Constructeurs : ';
+        rech_criteres += rech_constructeurs.substring(0, rech_constructeurs.length - 1);
+        rech_criteres += '</p>';
+        cpt_check = 0;
+      }
+
+      $('#systemes_dexploitations:checked').each(function() {
+        rech_systemes_exp += $(this).val() + ', ';
+        tab_systemes_exp.push($(this).val());
+        cpt_check++;
+      });
+
+      if (cpt_check > 0)
+      {
+        rech_criteres += "<p>Systèmes d'exploitation : ";
+        rech_criteres += rech_systemes_exp.substring(0, rech_systemes_exp.length - 1);
+        rech_criteres += '</p>';
+        cpt_check = 0;
       }
 
       $('#processeurs:checked').each(function() {
@@ -110,18 +145,20 @@ jQuery(function($) {
 
 
 
-      data['lib_categorie'] = lib_categorie;
+      // data['lib_categorie'] = lib_categorie;
       data['type'] = categorie;
       data['processeurs'] = tab_processeurs;
       data['memoires_vives'] = tab_memoire_vive;
-      data['action'] = 'search_produits_critere';
+      data['systemes_exploitations'] = tab_systemes_exp;
+      data['constructeurs'] = tab_constructeurs;
+      data['action'] = 'search_produits_criteres';
       data['post_type'] = '<?= $_GET["post_type"]; ?>';
-      // alert(categorie);
+      // alert(data['action']);
 
       $.post(ajaxurl , data)
 
       .done(function(data) {
-
+        // alert(data);
         $('.results').html(data);
         
         $('div.spinner').toggle();
