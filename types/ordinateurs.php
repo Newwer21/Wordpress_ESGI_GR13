@@ -138,6 +138,7 @@ function ordi_register() {
 	}
 
 	add_action('save_post', 'save_details');
+
 	function save_details(){
 	  global $post, $wpdb;
 
@@ -164,15 +165,15 @@ function ordi_register() {
 	 	
 	  $constructeur_ordinateur = strtolower(sanitize_text_field($_POST["constructeur_ordinateur"]));
 	
-	  $prix_ordinateur = intval($_POST["prix_ordinateur"]);
+	  $prix_ordinateur = floatval($_POST["prix_ordinateur"]);
 	  $processeur_ordinateur = strtolower(sanitize_text_field($_POST["processeur_ordinateur"]));
-	  $ram_ordinateur = sanitize_text_field($_POST["ram_ordinateur"]);
+	  $ram_ordinateur = intval($_POST["ram_ordinateur"]);
 	  $chipset_ordinateur = strtolower(sanitize_text_field($_POST["chipset_ordinateur"]));
-	  $dd_ordinateur = sanitize_text_field($_POST["dd_ordinateur"]);
+	  $dd_ordinateur = intval($_POST["dd_ordinateur"]);
 	  $tactile_ordinateur = intval($_POST["tactile_ordinateur"]);
 	  $os_ordinateur = strtolower(sanitize_text_field($_POST["os_ordinateur"]));
-	  $poids_ordinateur = $_POST["poids_ordinateur"];
-	  $resolution_ordinateur = intval(($_POST["resolution_ordinateur"]));
+	  $poids_ordinateur = floatval($_POST["poids_ordinateur"]);
+	  $resolution_ordinateur = floatval(($_POST["resolution_ordinateur"]));
 
 	  // Mise a jour post meta
 	  update_post_meta($post->ID, "constructeur_ordinateur", $constructeur_ordinateur);
@@ -192,7 +193,7 @@ function ordi_register() {
 	  $terms = get_the_terms( $post->ID, 'types' );
 	  $term = $terms[0]->slug;
 	  /* vérification si existe une ligne de post */
-	  $exist = $wpdb->get_row("SELECT * FROM $table WHERE id_post = $post->ID;");
+	  $exist = $wpdb->get_row("SELECT id_ordinateur FROM $table WHERE id_post = $post->ID;");
 // var_dump($exist);
 	  if (isset($exist->id_ordinateur))
 	  {
@@ -230,7 +231,7 @@ function ordi_register() {
 			   		'id_post' 		  		  	=> $post->ID
 
 			   	),
-			  	array('%s', '%s', '%d', '%s', '%d', '%s', '%d', '%d', '%s', '%f', '%f', '%d')
+			  	array('%s', '%s', '%f', '%s', '%d', '%s', '%d', '%d', '%s', '%f', '%f', '%d')
 			);
 		}
 	}

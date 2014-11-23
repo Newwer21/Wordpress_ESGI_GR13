@@ -1,6 +1,7 @@
 <?php
 
 add_action('init', 'create_table_ordinateurs');
+add_action('init', 'create_table_tablettes');
 
 function create_table_ordinateurs()
 	{
@@ -14,7 +15,7 @@ function create_table_ordinateurs()
 					  `id_ordinateur` smallint(2) NOT NULL AUTO_INCREMENT,
 					  `type_ordinateur` varchar(10) NOT NULL,
 					  `constructeur_ordinateur` varchar(25) NOT NULL,
-					  `prix_ordinateur` int(4) NOT NULL,
+					  `prix_ordinateur` decimal(5,2) NOT NULL,
 					  `processeur_ordinateur` varchar(10) NOT NULL,
 					  `ram_ordinateur` tinyint(2) NOT NULL,
 					  `chipset_ordinateur` varchar(15) NOT NULL,
@@ -25,6 +26,41 @@ function create_table_ordinateurs()
 					  `resolution_ordinateur` decimal(3,1) NOT NULL,
 					  `id_post` int(11) NOT NULL,
 					  PRIMARY KEY (`id_ordinateur`)
+					) ENGINE=MyISAM  DEFAULT CHARSET=latin1;";
+
+			require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+
+			if (dbDelta($sql) == NULL)
+			{
+				echo "Erreur à la creation de la table $table"; 
+				die();
+			}
+		} // if $wpdb->get_var();
+	}
+
+	function create_table_tablettes()
+	{
+		global $wpdb;
+
+		$table = $wpdb->prefix . 'tablettes';
+		
+		if ( $wpdb->get_var("SHOW TABLES LIKE '$table'") != $table )
+		{
+			$sql = "CREATE TABLE $table (
+					  `id_tablette` smallint(2) NOT NULL AUTO_INCREMENT,
+					  `type_tablette` varchar(10) NOT NULL,
+					  `constructeur_tablette` varchar(25) NOT NULL,
+					  `prix_tablette` decimal(5,2) NOT NULL,
+					  -- `processeur_tablette` varchar(10) NOT NULL,
+					  -- `ram_ordinateur` tinyint(2) NOT NULL,
+					  -- `chipset_ordinateur` varchar(15) NOT NULL,
+					  `dd_tablette` smallint(4) NOT NULL,
+					  `bluetooth_tablette` tinyint(1) NOT NULL COMMENT '1 = Oui/Non',
+					  -- `os_tablette` varchar(15) NOT NULL,
+					  -- `poids_ordinateur` decimal(2,1) NOT NULL,
+					  `resolution_tablette` decimal(3,1) NOT NULL,
+					  `id_post` int(11) NOT NULL,
+					  PRIMARY KEY (`id_tablette`)
 					) ENGINE=MyISAM  DEFAULT CHARSET=latin1;";
 
 			require_once(ABSPATH . 'wp-admin/includes/upgrade.php');

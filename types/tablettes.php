@@ -50,10 +50,10 @@ function tab_register() {
 
 	  /* get_post_meta() fonctionne pour récuperer les valeurs des meta box, 
 	  get_post_custom() uniquement pour les custom fields ... */
-	  $constructeur_tablette = $custom["constructeurtab_tablette"][0] ;
-	  $os_tablette = $custom["os_tab"][0] ;
-	  $taille_tablette =$custom["taille_tablette"][0] ; 
-	  $dd_tablette = $custom["dd_tab"][0] ;
+	  $constructeur_tablette = $custom["constructeur_tablette"][0] ;
+	  // $os_tablette = $custom["os_tab"][0] ;
+	  $resolution_tablette =$custom["resolution_tablette"][0] ; 
+	  $dd_tablette = $custom["dd_tablette"][0] ;
 	  $bluetooth_tablette = $custom["bluetooth_tablette"][0] ;
 	  $prix_tablette = $custom["prix_tablette"][0] ;
 	  /* Source : http://wabeo.fr/jouons-avec-les-meta-boxes/ */
@@ -77,14 +77,8 @@ function tab_register() {
 	   			</tr>
 	   			<tr>
 	   				<td>
-		   				<label for="os_tablette">Systeme d exploitation </label>
-		   				<input type="text" id="os_tablette" name="os_tablette" placeholder="'.$os_tablette.'" value="'.$os_tablette.'">
-		   			</td>
-	   			</tr>
-	   			<tr>
-	   				<td>
-		   				<label for="taille_tablette">Taille  </label>
-		   				<input type="text" id="taille_tablette" name="taille_tablette" placeholder="'.$taille_tablette.'" value="'.$taille_tablette.'">
+		   				<label for="resolution_tablette">Résolution écran  </label>
+		   				<input type="text" id="resolution_tablette" name="resolution_tablette" placeholder="'.$resolution_tablette.'" value="'.$resolution_tablette.'">
 		   			</td>
 	   			</tr>
 	   			<tr>
@@ -113,17 +107,86 @@ function tab_register() {
 add_action('save_post', 'save_tab');
 	function save_tab(){
 
-	  update_post_meta($post->ID, "constructeur_tablette", intval($_POST["constructeur_tablette"]));
-	  update_post_meta($post->ID, "os_tablette", sanitize_text_field($_POST["os_tablette"]));
-	  update_post_meta($post->ID, "taille_tablette", intval($_POST["taille_tablette"]));
-	  update_post_meta($post->ID, "dd_tablette", sanitize_text_field($_POST["dd_tablette"]));
-	  update_post_meta($post->ID, "bluetooth_tablette", sanitize_text_field($_POST["bluetooth_tablette"]));
-	  update_post_meta($post->ID, "prix_tablette", intval($_POST["prix_tablette"]));
+		// die;
 
+		global $post, $wpdb;
+
+		if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE)
+
+        return;
+
+	    if (empty($_POST["constructeur_tablette"]) || 
+		  	  // empty($_POST["os_tablette"]) ||
+		  	  empty($_POST["resolution_tablette"]) ||
+		  	  empty($_POST["dd_tablette"]) ||
+		  	  empty($_POST["bluetooth_tablette"]) ||
+		  	  // empty($_POST["bluetooth_tablette"]) ||
+		  	  empty($_POST["prix_tablette"])
+		  	 )
+		  	return;
+
+		$constructeur_tablette = strtolower(sanitize_text_field($_POST["constructeur_tablette"]));
+		// $os_tablette = sanitize_text_field($_POST["os_tablette"])
+		echo $resolution_tablette = floatval($_POST["resolution_tablette"]);
+		$dd_tablette = intval($_POST["dd_tablette"]);
+		$bluetooth_tablette = intval($_POST["bluetooth_tablette"]);
+		$prix_tablette = floatval($_POST["prix_tablette"]);
+// die;
+	  	update_post_meta($post->ID, "constructeur_tablette", $constructeur_tablette);
+	  	// update_post_meta($post->ID, "os_tablette", $os_tablette );
+	  	update_post_meta($post->ID, "resolution_tablette", $resolution_tablette);
+	  	update_post_meta($post->ID, "dd_tablette", $dd_tablette);
+	  	update_post_meta($post->ID, "bluetooth_tablette", $bluetooth_tablette);
+	  	update_post_meta($post->ID, "prix_tablette", $prix_tablette);
+
+	  	/* ajout sur table wp_ordinateurs */
+	  	$table = $wpdb->prefix. 'tablettes';
+
+	  	$terms = get_the_terms( $post->ID, 'marques' );
+	  	$term = $terms[0]->slug;
+	  	/* vérification si existe une ligne de post */
+	  	// echo "SELECT id_tablette FROM $table WHERE id_post = $post->ID;";
+	  	$exist = $wpdb->get_row("SELECT id_tablette FROM $table WHERE id_post = $post->ID;");
+	// var_dump($exist);
+	  	
+	  	if (isset($exist->id_tablette))
+	  	{
+	  		$wpdb->query("UPDATE $table 
+	   						SET type_tablette = '$term',
+	   							constructeur_tablette = '$constructeur_tablette',
+	   							prix_tablette = $prix_tablette,
+	   							dd_tablette = $dd_tablette,
+	   							bluetooth_tablette = $bluetooth_tablette,
+	   							resolution_tablette = $resolution_tablette
+	   						WHERE id_post = $post->ID;");
+	  		// $wpdb->show_errors();
+	 	 	// exit( var_dump( $wpdb->last_query ) );
+	  	}
+	  	else
+	  	{
+	  		// echo 'insert';
+		   $res = $wpdb->insert($table,
+			  	array(
+			  		'type_tablette'		 	=> $term,
+			  		'constructeur_tablette' => $constructeur_tablette,
+			   		'prix_tablette' 		=> $prix_tablette,
+			   		'dd_tablette' 		  	=> $dd_tablette,
+			   		'bluetooth_tablette' 	=> $bluetooth_tablette,
+			   		'resolution_tablette'   => $resolution_tablette,
+			   		'id_post' 		  		=> $post->ID
+
+			   	),
+			  	array('%s', '%s', '%f', '%d', '%d', '%f', '%d')
+			);
+
+		   // exit( var_dump( $wpdb->last_query ) );
+		   // die;
+		}
 	}
 
 add_action("manage_posts_custom_column",  "tab_custom_columns");
 add_filter("manage_edit-tablettes_columns", "tab_edit_columns");
+
 function tab_edit_columns($columns){
   $columns = array(
     "cb" => '<input type="checkbox" />',
