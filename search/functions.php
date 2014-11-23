@@ -1,5 +1,42 @@
 <?php
 
+add_action('init', 'create_table_ordinateurs');
+
+function create_table_ordinateurs()
+	{
+		global $wpdb;
+
+		$table = $wpdb->prefix . 'ordinateurs';
+		
+		if ( $wpdb->get_var("SHOW TABLES LIKE '$table'") != $table )
+		{
+			$sql = "CREATE TABLE $table (
+					  `id_ordinateur` smallint(2) NOT NULL AUTO_INCREMENT,
+					  `type_ordinateur` varchar(10) NOT NULL,
+					  `constructeur_ordinateur` varchar(25) NOT NULL,
+					  `prix_ordinateur` int(4) NOT NULL,
+					  `processeur_ordinateur` varchar(10) NOT NULL,
+					  `ram_ordinateur` tinyint(2) NOT NULL,
+					  `chipset_ordinateur` varchar(15) NOT NULL,
+					  `dd_ordinateur` smallint(4) NOT NULL,
+					  `tactile_ordinateur` tinyint(1) NOT NULL COMMENT '1 = Oui/Non',
+					  `os_ordinateur` varchar(15) NOT NULL,
+					  `poids_ordinateur` decimal(2,1) NOT NULL,
+					  `resolution_ordinateur` decimal(3,1) NOT NULL,
+					  `id_post` int(11) NOT NULL,
+					  PRIMARY KEY (`id_ordinateur`)
+					) ENGINE=MyISAM  DEFAULT CHARSET=latin1;";
+
+			require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+
+			if (dbDelta($sql) == NULL)
+			{
+				echo "Erreur à la creation de la table $table"; 
+				die();
+			}
+		} // if $wpdb->get_var();
+	}
+
 	function get_taxonomy_for_post_types() {
 
 		// $infos = array();
@@ -85,6 +122,8 @@
 				$tab_processeurs = !empty($_POST['processeurs']) ? $_POST['processeurs'] : array();
 				$tab_memoires_ram = !empty($_POST['memoires_vives']) ? $_POST['memoires_vives'] : array();
 				$tab_constructeurs = !empty($_POST['constructeurs']) ? $_POST['constructeurs'] : array();
+				$tab_disques_durs = !empty($_POST['disques_durs']) ? $_POST['disques_durs'] : array();
+				$tab_systemes_exp = !empty($_POST['systemes_exploitations']) ? $_POST['systemes_exploitations'] : array();
 
 				// $taxonomy = $_POST['lib_categorie'];
 
@@ -100,7 +139,7 @@
 
 				$sql = "SELECT id_post FROM $table";
 				
-				// print_r($_POST);
+				print_r($_POST);
 
 				// SQL processeur
 				$taille = sizeof($tab_processeurs);
@@ -112,11 +151,11 @@
 					if (sizeof($tab_processeurs) == 1)
 					{
 						// echo '<br />seul';
-						$sql .= " processeur_$col = '$tab_processeurs[0]'";
+						$sql .= "processeur_$col = '$tab_processeurs[0]'";
 					}
 					else
 					{
-						echo 'Pas seul';
+						// echo 'Pas seul';
 						$sql .= "(";
 							$processeurs_sql = '';
 						foreach ($tab_processeurs as $process) {
@@ -184,11 +223,65 @@
 					}
 				}// if !empty $taille
 
+				// SQL Disque Dur
+				$taille = sizeof($tab_disques_durs);
+				
+				if (!empty($taille))
+				{
+					$sql .= where_or_and($sql); // Where ou and ?
+					if (sizeof($tab_disques_durs) == 1)
+					{
+						// echo '<br />seul';
+						$sql .= " dd_$col = $tab_disques_durs[0]";
+					}
+					else
+					{
+						// echo 'Pas seul';
+						$sql .= "(";
+						$dd_sql = '';
+						
+						foreach ($tab_disques_durs as $disque) {
+							$dd_sql .= " dd_$col = $disque OR";
+						}
+						// $pos_dern_or = srtchr($processeurs_sql, 'OR');
+						$dd_sql = substr($dd_sql, 0, strlen($dd_sql) - 2);
+
+						$sql .= "$dd_sql ) ";
+					}
+				}// if !empty $taille
+
+				// SQL OS
+				$taille = sizeof($tab_systemes_exp);
+				
+				if (!empty($taille))
+				{
+					$sql .= where_or_and($sql); // Where ou and ?
+					if (sizeof($tab_systemes_exp) == 1)
+					{
+						// echo '<br />seul';
+						$sql .= " os_$col = '$tab_systemes_exp[0]'";
+					}
+					else
+					{
+						// echo 'Pas seul';
+						$sql .= "(";
+						$os_sql = '';
+						
+						foreach ($tab_systemes_exp as $os) {
+							$os_sql .= " os_$col = '$os' OR";
+						}
+						// $pos_dern_or = srtchr($processeurs_sql, 'OR');
+						$os_sql = substr($os_sql, 0, strlen($os_sql) - 2);
+
+						$sql .= "$os_sql ) ";
+					}
+				}// if !empty $taille
+
 				echo $sql .= " AND type_$col = '$type';";
 			} // if $post_type == ordinateurs
 			else if ($post_type == 'tablettes')
 			{
-
+				echo 'tablettes recherche';
 
 			}	
 			// echo $sql;
@@ -197,24 +290,31 @@
 
 			// ob_start();
 
-			foreach ($results as $sql_post) :
+			if (sizeof($results) == 0)
+			{
+				echo 'Aucun ordinateur ne correspond à votre recherche.';
+			}
+			else
+			{
 
-				$post = get_post($sql_post->id_post); // Récupration du post
-				setup_postdata($post); // Récupréation des infos pour The Loop. ?>
+				foreach ($results as $sql_post) :
 
-				<div class="resultat">
-					<div class="title_resultat"><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></div>
-					<div class="image_resultat"><?php the_post_thumbnail('medium' ); ?></div>
-					<div class="description_resultat"><?php the_excerpt(); ?></div>
-				</div>
+					$post = get_post($sql_post->id_post); // Récupration du post
+					setup_postdata($post); // Récupréation des infos pour The Loop. ?>
 
-			<?php // print_r($post);
-			endforeach;
+					<div class="resultat">
+						<div class="title_resultat"><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></div>
+						<div class="image_resultat"><?php the_post_thumbnail('medium' ); ?></div>
+						<div class="description_resultat"><?php the_excerpt(); ?></div>
+					</div>
 
+				<?php // print_r($post);
+				endforeach;
+			}
 			// $content = ob_get_clean(); 
 			// echo $content;
 			// print_r($results);
-			die; // Nécéssaire !
+			die(); // Nécéssaire !
 				
 		}	
 
@@ -223,9 +323,9 @@
 
 			if (strstr($chaine, "WHERE") === false)
 
-				return "WHERE";
+				return " WHERE ";
 			else
-				return "AND";
+				return " AND ";
 		}
 
 	/* Fonction qui permet d'afficher toutes les valeurs d'un champs personnalisé */
@@ -257,5 +357,4 @@
 		// var_dump($values);
 		return $result;
 	}
-	
 ?>

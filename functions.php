@@ -2,8 +2,8 @@
 	/*include_once plugin_dir_path( __FILE__ ).'/types/produits.php';*/
 	include_once plugin_dir_path( __FILE__ ).'/types/ordinateurs.php';
 	include_once plugin_dir_path( __FILE__ ).'/types/tablettes.php';
-	include_once plugin_dir_path(__FILE__ ).'/widget-recherche-criteres.php';
-	include_once plugin_dir_path(__FILE__ ).'/widget-menu.php';
+	include_once plugin_dir_path(__FILE__ ).'/widget/widget-recherche-criteres.php';
+	include_once plugin_dir_path(__FILE__ ).'/widget/widget-menu.php';
 	include_once plugin_dir_path(__FILE__ ).'/search/functions.php'; // Function pour la recherche par critères.
 
 	add_action('wp_enqueue_scripts', 'init_js');
@@ -152,5 +152,44 @@ dbDelta( $sql );
 
 
 /* ------------------------------------------------------------------------------------------------------ */
+/* Changement comportement the_excerpt pour Ordinateurs et Tablettes */
+add_filter('the_excerpt', 'the_excerpt_filter');
+
+function the_excerpt_filter($content) {
+  // assuming you have created a page/post entitled 'debug'
+  if ($GLOBALS['post']->post_type == 'ordinateurs') {
+
+  	$custom = get_post_custom($post->ID);
+
+  	$constructeur_ordinateur = $custom["constructeur_ordinateur"][0];
+  	$prix_ordinateur = $custom['prix_ordinateur'][0];
+  	$processeur_ordinateur = $custom["processeur_ordinateur"][0] ;
+  	$chipset_ordinateur = $custom["chipset_ordinateur"][0] ;
+  	$ram_ordinateur = $custom["ram_ordinateur"][0] ;
+  	$dd_ordinateur = $custom["dd_ordinateur"][0];
+  	$tactile_ordinateur = $custom["tactile_ordinateur"][0] == 1 ? 'Oui' : 'Non';
+  	$os_ordinateur = $custom["os_ordinateur"][0] ;
+  	$poids_ordinateur = $custom["poids_ordinateur"][0] ;
+  	$resolution_ordinateur = $custom["resolution_ordinateur"][0];
+
+    $msg = '';
+
+    $msg .= 'Constructeur : ' . $constructeur_ordinateur . ',' .
+    		' Processeur : ' . $processeur_ordinateur . ',' .
+    		' Carte graphique : ' . $chipset_ordinateur . ',' .
+    		' Résolution écran : ' . $resolution_ordinateur . '",' .
+    		' Mémoire vive : ' . $ram_ordinateur . ' Go' . ',' .
+    		' Disque dur : ' . $dd_ordinateur .' Go' . ',' .
+    		' Système d\'exploitation : ' . $os_ordinateur .
+    		'...';
+
+    return $msg;
+  }
+  // otherwise returns the database content
+  else
+  {
+  		return $content;
+  }
+}
 
 ?>

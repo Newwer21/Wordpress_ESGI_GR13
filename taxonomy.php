@@ -49,12 +49,14 @@ jQuery(function($) {
       var rech_memoire_vive = '';
       var rech_constructeurs = '';
       var rech_systemes_exp = '';
+      var rech_disques_durs = '';
 
       var data = {};
       var type = $('#type').val();
 
       var tab_processeurs = [];
       var tab_memoire_vive = [];
+      var tab_disques_durs = [];
       var tab_constructeurs = [];
       var tab_systemes_exp = [];
       
@@ -136,6 +138,20 @@ jQuery(function($) {
         cpt_check = 0;
       }
 
+      $('#disques_durs:checked').each(function() {
+        rech_disques_durs += $(this).val() + ', ';
+        tab_disques_durs.push( $(this).val() );
+        cpt_check++;
+      });
+      
+      if (cpt_check > 0) 
+      {
+        rech_criteres += '<p>Disques durs : ';
+        rech_criteres += rech_disques_durs.substring(0, rech_disques_durs.length - 1);
+        rech_criteres += '</p>';
+        cpt_check = 0;
+      }
+
       if (rech_criteres != '') // Affiche si critère choisi.
         $('#search_critere').html('<h2>Filtre de recherche</h2>' + rech_criteres);
       // alert(rech_criteres);
@@ -151,6 +167,8 @@ jQuery(function($) {
       data['memoires_vives'] = tab_memoire_vive;
       data['systemes_exploitations'] = tab_systemes_exp;
       data['constructeurs'] = tab_constructeurs;
+      data['disques_durs'] = tab_disques_durs
+
       data['action'] = 'search_produits_criteres';
       data['post_type'] = '<?= $_GET["post_type"]; ?>';
       // alert(data['action']);

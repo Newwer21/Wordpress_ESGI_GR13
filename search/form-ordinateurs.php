@@ -4,6 +4,8 @@
 	$memoires = get_all_custom_fields_values('ram_ordinateur');
 	$system_expl = get_all_custom_fields_values('os_ordinateur');
 	$constructeurs = get_all_custom_fields_values('constructeur_ordinateur');
+	$disques_durs = get_all_custom_fields_values('dd_ordinateur');
+
 	$args_terms = array('hide_empty' => false);
 
 	// var_dump($processeurs);
@@ -42,4 +44,9 @@
 		<p>Constructeurs</p>
 		<?php foreach ($constructeurs as $key => $value) : ?>
 				<p class="champs_critere"><span><input type="checkbox" name="constructeurs" id="constructeurs" value="<?= $key; ?>"> <?php echo $key." ($value) "; ?></span></p>
+		<?php endforeach; ?>
+
+		<p>Disques Durs</p>
+		<?php foreach ($disques_durs as $key => $value) : ?>
+				<p class="champs_critere"><span><input type="checkbox" name="disques_durs" id="disques_durs" value="<?= $key; ?>"> <?php echo $key." ($value) "; ?></span></p>
 		<?php endforeach; ?>
