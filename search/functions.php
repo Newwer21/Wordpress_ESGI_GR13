@@ -109,8 +109,13 @@ function create_table_ordinateurs()
 		    $type = $_POST ['type']; 
 		    $taxonomy = $_POST['lib_categorie'];
 
+		    $post_type = $_POST['post_type'];
+
+		    if ($post_type == 'ordinateurs') $col = "ordinateur";
+		    else $col = 'tablette';
+
 		    $arguments = array(
-				'post_type' => $_POST['post_type'],
+				'post_type' => $post_type,
 				'post_status' => 'publish',
 				 $taxonomy => $type, // trie par type de Produits
 				'paged' => $home_paged
@@ -119,14 +124,24 @@ function create_table_ordinateurs()
 			query_posts($arguments);
 
 			ob_start(); ?>
-			<h2><?= $type; ?></h2>
+			<table>
+				<tr>
+					<th>Nom</th>
+					<th>Prix</th>
+				</tr>
 	<?php while (have_posts()) : the_post(); ?>
-
-				<article class="article-<?= $type; ?>">
-				 	<h3 class="phab-name"><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h3>
-				    <p class="phab-description"><?php single_tag_title(); ?> 	<?php the_post_thumbnail('medium'); ?></p> 
-				</article>
+	<?php $prix = get_post_custom_values("prix_$col"); ?>
+				<tr>
+					<td>
+						<div class="title_resultat"><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></div>
+						<div class="image_resultat"><?php the_post_thumbnail('medium' ); ?></div>
+						<div class="description_resultat"><?php the_excerpt(); ?></div>
+						<?php //single_cat_title(); ?>
+					</td>
+					<td><?= $prix[0]; ?></td>
+				</tr>
 	<?php endwhile; ?>
+				</table>
 				<div class="fix_clear"></div>
 	<?php $content = ob_get_clean(); 
 			echo $content;
@@ -142,6 +157,8 @@ function create_table_ordinateurs()
 
 			global $wpdb, $post;
 			$post_type = $_POST['post_type'];
+			$prix_min = isset($_POST['prix_min']) ? $_POST['prix_min'] : '';
+			$prix_max = isset($_POST['prix_max']) ? $_POST['prix_max'] : '';
 
 			$type = $_POST['type'];
 			// Partie ordinateurs
@@ -160,6 +177,7 @@ function create_table_ordinateurs()
 				$tab_constructeurs = !empty($_POST['constructeurs']) ? $_POST['constructeurs'] : array();
 				$tab_disques_durs = !empty($_POST['disques_durs']) ? $_POST['disques_durs'] : array();
 				$tab_systemes_exp = !empty($_POST['systemes_exploitations']) ? $_POST['systemes_exploitations'] : array();
+				$tab_resolutions_ecrans = !empty($_POST['resolutions_ecrans']) ? $_POST['resolutions_ecrans'] : array();
 
 				// $taxonomy = $_POST['lib_categorie'];
 
@@ -313,11 +331,171 @@ function create_table_ordinateurs()
 					}
 				}// if !empty $taille
 
-				echo $sql .= " AND type_$col = '$type';";
+				// SQL Résolution écran
+				$taille = sizeof($tab_resolutions_ecrans);
+				
+				if (!empty($taille))
+				{
+					$sql .= where_or_and($sql); // Where ou and ?
+					if (sizeof($tab_resolutions_ecrans) == 1)
+					{
+						// echo '<br />seul';
+						$sql .= " resolution_$col = $tab_resolutions_ecrans[0]";
+					}
+					else
+					{
+						// echo 'Pas seul';
+						$sql .= "(";
+						$resolution_sql = '';
+						
+						foreach ($tab_resolutions_ecrans as $resolution) {
+							$resolution_sql .= " resolution_$col = $resolution OR";
+						}
+						// $pos_dern_or = srtchr($processeurs_sql, 'OR');
+						$resolution_sql = substr($resolution_sql, 0, strlen($resolution_sql) - 2);
+
+						$sql .= "$resolution_sql ) ";
+					}
+				}// if !empty $taille
+
+				// SQL Prix
+
+				if ($prix_min && !$prix_max)
+				{
+					$sql .= where_or_and($sql) ."prix_$col > $prix_min"; 
+				}
+				else if ($prix_max && !$prix_min)
+				{
+					$sql .= where_or_and($sql) ."prix_$col < $prix_max"; 
+				}
+				else if ($prix_min  && $prix_max)
+				{
+					$sql .= where_or_and($sql) ."prix_$col BETWEEN $prix_min AND $prix_max"; 
+				}
+
+				$sql .= where_or_and($sql) ."type_$col = '$type';";
 			} // if $post_type == ordinateurs
+
 			else if ($post_type == 'tablettes')
 			{
-				echo 'tablettes recherche';
+				
+				$col = 'tablette';
+				$tab_constructeurs = !empty($_POST['constructeurs']) ? $_POST['constructeurs'] : array();
+				$tab_disques_durs = !empty($_POST['disques_durs']) ? $_POST['disques_durs'] : array();
+				$tab_resolutions_ecrans = !empty($_POST['resolutions_ecrans']) ? $_POST['resolutions_ecrans'] : array();
+				$bluetooth = !empty($_POST['bluetooth']) ? $_POST['bluetooth'] : '';
+
+				$table = $wpdb->prefix. "$post_type ";
+
+				$sql = "SELECT id_post FROM $table";
+				
+				// print_r($_POST);
+
+				// SQL constructeur
+				$taille = sizeof($tab_constructeurs);
+
+				if (!empty($taille))
+				{
+					$sql .= where_or_and($sql); // Where ou and ?
+
+					if (sizeof($tab_constructeurs) == 1)
+					{
+						// echo '<br />seul';
+						$sql .= "constructeur_$col = '$tab_constructeurs[0]'";
+					}
+					else
+					{
+						// echo 'Pas seul';
+						$sql .= "(";
+							$constructeurs_sql = '';
+						foreach ($tab_constructeurs as $construct) {
+							$constructeurs_sql .= " constructeur_$col = '$construct' OR";
+						}
+						// $pos_dern_or = srtchr($processeurs_sql, 'OR');
+						$constructeurs_sql = substr($constructeurs_sql, 0, strlen($constructeurs_sql) - 2);
+
+						$sql .= "$constructeurs_sql ) ";
+					}
+				}// if !empty $taille
+
+				// SQL Disque Dur
+				$taille = sizeof($tab_disques_durs);
+				
+				if (!empty($taille))
+				{
+					$sql .= where_or_and($sql); // Where ou and ?
+					if (sizeof($tab_disques_durs) == 1)
+					{
+						// echo '<br />seul';
+						$sql .= " dd_$col = $tab_disques_durs[0]";
+					}
+					else
+					{
+						// echo 'Pas seul';
+						$sql .= "(";
+						$dd_sql = '';
+						
+						foreach ($tab_disques_durs as $disque) {
+							$dd_sql .= " dd_$col = $disque OR";
+						}
+						// $pos_dern_or = srtchr($processeurs_sql, 'OR');
+						$dd_sql = substr($dd_sql, 0, strlen($dd_sql) - 2);
+
+						$sql .= "$dd_sql ) ";
+					}
+				}// if !empty $taille
+
+				// SQL Résolution écran
+				$taille = sizeof($tab_resolutions_ecrans);
+				
+				if (!empty($taille))
+				{
+					$sql .= where_or_and($sql); // Where ou and ?
+					if (sizeof($tab_resolutions_ecrans) == 1)
+					{
+						// echo '<br />seul';
+						$sql .= " resolution_$col = $tab_resolutions_ecrans[0]";
+					}
+					else
+					{
+						// echo 'Pas seul';
+						$sql .= "(";
+						$resolution_sql = '';
+						
+						foreach ($tab_resolutions_ecrans as $resolution) {
+							$resolution_sql .= " resolution_$col = $resolution OR";
+						}
+						// $pos_dern_or = srtchr($processeurs_sql, 'OR');
+						$resolution_sql = substr($resolution_sql, 0, strlen($resolution_sql) - 2);
+
+						$sql .= "$resolution_sql ) ";
+					}
+				}// if !empty $taille
+
+				// SQL Bluetooth
+
+				if ($bluetooth != '')
+				{
+					$sql .= where_or_and($sql) ."bluetooth_$col = 1"; 
+				}
+
+				// SQL Prix
+
+				if ($prix_min && !$prix_max)
+				{
+					$sql .= where_or_and($sql) ."prix_$col > $prix_min"; 
+				}
+				else if ($prix_max && !$prix_min)
+				{
+					$sql .= where_or_and($sql) ."prix_$col < $prix_max"; 
+				}
+				else if ($prix_min  && $prix_max)
+				{
+					$sql .= where_or_and($sql) ."prix_$col BETWEEN $prix_min AND $prix_max"; 
+				}
+
+				// Toujours en fonction du type.
+				$sql .= where_or_and($sql) ."type_$col = '$type';";
 
 			}	
 			// echo $sql;
@@ -331,18 +509,33 @@ function create_table_ordinateurs()
 				echo 'Aucun ordinateur ne correspond à votre recherche.';
 			}
 			else
-			{
+			{ 
 
+			?>
+
+			<table> 
+				<tr>
+					<th>Nom</th>
+					<th>Prix</th>
+				</tr>
+			<?php
 				foreach ($results as $sql_post) :
 
 					$post = get_post($sql_post->id_post); // Récupration du post
-					setup_postdata($post); // Récupréation des infos pour The Loop. ?>
+					setup_postdata($post); // Récupréation des infos pour The Loop. 
+					$prix = get_post_custom_values("prix_$col");
+			?>
 
-					<div class="resultat">
-						<div class="title_resultat"><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></div>
-						<div class="image_resultat"><?php the_post_thumbnail('medium' ); ?></div>
-						<div class="description_resultat"><?php the_excerpt(); ?></div>
-					</div>
+					<tr class="resultat">
+						<td>
+							<div class="title_resultat"><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></div>
+							<div class="image_resultat"><?php the_post_thumbnail('medium' ); ?></div>
+							<div class="description_resultat"><?php the_excerpt(); ?></div>
+						</td>
+						<td><?= $prix[0]; ?> </td>
+					
+					
+					</tr>
 
 				<?php // print_r($post);
 				endforeach;

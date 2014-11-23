@@ -34,6 +34,12 @@ jQuery(function($) {
         $('.results').html(data);
         $('div.spinner').toggle();
       });
+
+      if (categorie == 'ipad')
+      {
+        $('#constructeurs input[value="apple"]').prop('checked');
+      }
+
   }); /* .ready() */
 
   /* Choix par critères */
@@ -50,6 +56,7 @@ jQuery(function($) {
       var rech_constructeurs = '';
       var rech_systemes_exp = '';
       var rech_disques_durs = '';
+      var rech_resolutions_ecrans = '';
 
       var data = {};
       var type = $('#type').val();
@@ -59,6 +66,7 @@ jQuery(function($) {
       var tab_disques_durs = [];
       var tab_constructeurs = [];
       var tab_systemes_exp = [];
+      var tab_resolutions_ecrans = [];
       
       var prix_min = $('#prix_min').val();
       var prix_max = $('#prix_max').val();
@@ -67,11 +75,9 @@ jQuery(function($) {
 
       if (prix_min) {
         rech_criteres += '<p>De ' + prix_min + '€';
-        data['prix_min'] = prix_min;
       }
 
       if (prix_max) {
-        data['prix_max'] = prix_max;
         rech_criteres += ' à ' + prix_max + '€';
       }
 
@@ -80,6 +86,20 @@ jQuery(function($) {
       if (type) 
       {
         rech_criteres += '<p>Catégorie : ' + type + '</p>';
+      }
+
+      $('#resolutions:checked').each(function() {
+        rech_resolutions_ecrans += $(this).val() + ', ';
+        tab_resolutions_ecrans.push($(this).val());
+        cpt_check++;
+      });
+
+      if (cpt_check > 0)
+      {
+        rech_criteres += '<p>Résolutions écran: ';
+        rech_criteres += rech_resolutions_ecrans.substring(0, rech_resolutions_ecrans.length - 1);
+        rech_criteres += '</p>';
+        cpt_check = 0;
       }
 
       $('#constructeurs:checked').each(function() {
@@ -159,15 +179,25 @@ jQuery(function($) {
       if (type == '')
         type = '<?= $_GET["types"]; ?>';
 
+      // Vérification check
+      if ($('#bluetooth').prop('checked'))
+      {
+        // alert('checked');
+        data['bluetooth'] = 1;
+      }
+
 
 
       // data['lib_categorie'] = lib_categorie;
+      data['prix_min'] = prix_min;
+      data['prix_max'] = prix_max;
       data['type'] = categorie;
       data['processeurs'] = tab_processeurs;
       data['memoires_vives'] = tab_memoire_vive;
       data['systemes_exploitations'] = tab_systemes_exp;
       data['constructeurs'] = tab_constructeurs;
       data['disques_durs'] = tab_disques_durs
+      data['resolutions_ecrans'] = tab_resolutions_ecrans;
 
       data['action'] = 'search_produits_criteres';
       data['post_type'] = '<?= $_GET["post_type"]; ?>';

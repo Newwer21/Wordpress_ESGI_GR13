@@ -4,6 +4,7 @@
 	include_once plugin_dir_path( __FILE__ ).'/types/tablettes.php';
 	include_once plugin_dir_path(__FILE__ ).'/widget/widget-recherche-criteres.php';
 	include_once plugin_dir_path(__FILE__ ).'/widget/widget-menu.php';
+	include_once plugin_dir_path(__FILE__ ).'/widget/widget-reservation.php';
 	include_once plugin_dir_path(__FILE__ ).'/search/functions.php'; // Function pour la recherche par critères.
 
 	add_action('wp_enqueue_scripts', 'init_js');
@@ -116,7 +117,7 @@ $email = $_POST['email'];
 $idpost = $_POST['idPost'];
 $date = date('Y-m-d H:i:s' ,mktime(date("H"),date("i"),date("s"),date("m"),date("d"),date("Y")));
 
-// reservationTable(); 
+reservationTable(); 
 $result = $wpdb->insert('wp_reservation',
 		array('nom_res' => $nom,
 			'mail_res' => $email,
@@ -132,9 +133,12 @@ if ($result > 0) {echo "insert";}
 }
 //creation table wp_reservation
 function reservationTable(){
+
+	echo 'reservation function'; 
+	die;
 $reservation = $wpdb->prefix . "reservation";
 
-if($wpdb->get_var('SHOW TABLE LIKE' . $reservation ) != $reservation)
+if($wpdb->get_var('SHOW TABLE LIKE' . "$reservation" ) != $reservation)
 {
 $sql = 'CREATE TABLE ' .$reservation. '(
 id_res INTEGER(20) NOT NULL AUTO_INCREMENT,
@@ -162,7 +166,6 @@ function the_excerpt_filter($content) {
   	$custom = get_post_custom($post->ID);
 
   	$constructeur_ordinateur = $custom["constructeur_ordinateur"][0];
-  	$prix_ordinateur = $custom['prix_ordinateur'][0];
   	$processeur_ordinateur = $custom["processeur_ordinateur"][0] ;
   	$chipset_ordinateur = $custom["chipset_ordinateur"][0] ;
   	$ram_ordinateur = $custom["ram_ordinateur"][0] ;
@@ -186,10 +189,25 @@ function the_excerpt_filter($content) {
     return $msg;
   }
   // otherwise returns the database content
-  else
+  else if ($GLOBALS['post']->post_type == 'tablettes') 
   {
-  		return $content;
+	  	$custom = get_post_custom($post->ID);
+
+	  	$constructeur_tablette = $custom["constructeur_tablette"][0];
+	  	$dd_tablette = $custom["dd_tablette"][0];
+	  	$resolution_tablette = $custom["resolution_tablette"][0];
+
+	    $msg = '';
+
+	    $msg .= 'Constructeur : ' . $constructeur_tablette . ',' .
+	    		' Résolution écran : ' . $resolution_tablette . '",' .
+	    		' Disque dur : ' . $dd_tablette .' Go' . ',' .
+	    		'...';
+
+	    return $msg;
   }
+  else
+  		return $content;
 }
 
 ?>

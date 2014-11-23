@@ -12,12 +12,10 @@ Template Name: tablettess
     <?php
       /* Récupération des données */
       $custom = get_post_custom();
-      $constructeur_tablettes = $custom["constructeur_tablettes"][0];
-      $prix_tablettes = $custom['prix_tablettes'][0];
-      $chipset_tablettes = $custom["chipset_tablettes"][0] ;
-      $dd_tablettes = $custom["dd_tablettes"][0];
-      $os_tablettes = $custom["os_tablettes"][0] ;
-      $taille_tablettes = $custom["taille_tablettes"][0];
+      $constructeur_tablettes = $custom["constructeur_tablette"][0];
+      $prix_tablettes = $custom['prix_tablette'][0];
+      $dd_tablettes = $custom["dd_tablette"][0];
+      $taille_tablettes = $custom["taille_tablette"][0];
 
     ?>
       <div class="single-tablettess-content">

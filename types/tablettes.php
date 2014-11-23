@@ -69,28 +69,28 @@ function tab_register() {
 	  $resolution_ordi = $custom["resolution_ordi"][0];*/
 	  // var_dump($custom);
 	   echo '<table>
-	   <tr>
+	   			<tr>
 	   				<td>
 		   				<label for="constructeur_tablette">constructeur </label>
-		   				<input type="text" id="constructeur_tablette" name="constructeur_tablette" placeholder="'.$constructeur_tablette.'" value="'.$constructeur_tablette.'">
+		   				<input type="text" id="constructeur_tablette" name="constructeur_tablette" placeholder="'.$constructeur_tablette.'" value="'.$constructeur_tablette.'" required>
 		   			</td>
 	   			</tr>
 	   			<tr>
 	   				<td>
 		   				<label for="resolution_tablette">Résolution écran  </label>
-		   				<input type="text" id="resolution_tablette" name="resolution_tablette" placeholder="'.$resolution_tablette.'" value="'.$resolution_tablette.'">
+		   				<input type="text" id="resolution_tablette" name="resolution_tablette" placeholder="'.$resolution_tablette.'" value="'.$resolution_tablette.'" required>
 		   			</td>
 	   			</tr>
 	   			<tr>
 	   				<td>
 		   				<label for="dd_tablette">Capacité de stockage </label>
-		   				<input type="text" id="dd_tablette" name="dd_tablette" placeholder="'.$dd_tablette.'" value="'.$dd_tablette.'">
+		   				<input type="text" id="dd_tablette" name="dd_tablette" placeholder="'.$dd_tablette.'" value="'.$dd_tablette.'" required>
 		   			</td>
 	   			</tr>
 	   			<tr>
 	   				<td>
 		   				<label for="bluetooth_tablette">Bluetooth </label>
-		   				<input type="text" id="bluetooth_tablette" name="bluetooth_tablette" placeholder="'.$bluetooth_tablette.'" value="'.$bluetooth_tablette.'">
+		   				<input type="text" id="bluetooth_tablette" name="bluetooth_tablette" placeholder="'.$bluetooth_tablette.'" value="'.$bluetooth_tablette.'" required>
 		   			</td>
 	   			</tr>
 	   			<tr>
@@ -127,7 +127,7 @@ add_action('save_post', 'save_tab');
 
 		$constructeur_tablette = strtolower(sanitize_text_field($_POST["constructeur_tablette"]));
 		// $os_tablette = sanitize_text_field($_POST["os_tablette"])
-		echo $resolution_tablette = floatval($_POST["resolution_tablette"]);
+		$resolution_tablette = floatval($_POST["resolution_tablette"]);
 		$dd_tablette = intval($_POST["dd_tablette"]);
 		$bluetooth_tablette = intval($_POST["bluetooth_tablette"]);
 		$prix_tablette = floatval($_POST["prix_tablette"]);

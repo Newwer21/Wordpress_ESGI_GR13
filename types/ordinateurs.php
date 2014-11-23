@@ -74,38 +74,38 @@ function ordi_register() {
 	   echo '<table>
 	   				<td>
 		   				<label for="constructeur_ordinateur">Constructeur </label>
-		   				<input type="text" id="constructeur_ordinateur" name="constructeur_ordinateur" placeholder="'.$constructeur_ordinateur.'" value="'.$constructeur_ordinateur.'">
+		   				<input type="text" id="constructeur_ordinateur" name="constructeur_ordinateur" placeholder="'.$constructeur_ordinateur.'" value="'.$constructeur_ordinateur.'" required>
 		   			</td>
 	   			</tr>
 	   			<tr>
 	   				<td>
 		   				<label for="prix_ordinateur">Prix </label>
-		   				<input type="text" id="prix_ordinateur" name="prix_ordinateur" placeholder="'.$prix_ordinateur.'" value="'.$prix_ordinateur.'">
+		   				<input type="text" id="prix_ordinateur" name="prix_ordinateur" placeholder="'.$prix_ordinateur.'" value="'.$prix_ordinateur.'" required>
 		   			</td>
 	   			</tr>
 	   			<tr>
 	   				<td>
 		   				<label for="processeur_ordinateur">Processeur  </label>
-		   				<input type="text" id="processeur_ordinateur" name="processeur_ordinateur" placeholder="'.$processeur_ordinateur.'" value="'.$processeur_ordinateur.'">
+		   				<input type="text" id="processeur_ordinateur" name="processeur_ordinateur" placeholder="'.$processeur_ordinateur.'" value="'.$processeur_ordinateur.'" required>
 		   			</td>
 	   			</tr>
 	   			<tr>
 	   				<td>
 		   				<label for="chipset_ordinateur">Chipset </label>
-		   				<input type="text" id="chipset_ordinateur" name="chipset_ordinateur" placeholder="'.$chipset_ordinateur.'" value="'.$chipset_ordinateur.'">
+		   				<input type="text" id="chipset_ordinateur" name="chipset_ordinateur" placeholder="'.$chipset_ordinateur.'" value="'.$chipset_ordinateur.'" required>
 		   			</td>
 	   			</tr>
 	   			<tr>
 	   				<td>
 		   				<label for="ram_ordinateur">RAM </label>
-		   				<input type="text" id="ram_ordinateur" name="ram_ordinateur" placeholder="'.$ram_ordinateur.'" value="'.$ram_ordinateur.'">
+		   				<input type="text" id="ram_ordinateur" name="ram_ordinateur" placeholder="'.$ram_ordinateur.'" value="'.$ram_ordinateur.'" required>
 		   			</td>
 	   			</tr>
 
 	   				<tr>
 	   				<td>
 		   				<label for="dd_ordinateur">Disque dur </label>
-		   				<input type="text" id="dd_ordinateur" name="dd_ordinateur" placeholder="'.$dd_ordinateur.'" value="'.$dd_ordinateur.'">
+		   				<input type="text" id="dd_ordinateur" name="dd_ordinateur" placeholder="'.$dd_ordinateur.'" value="'.$dd_ordinateur.'" required>
 		   			</td>
 	   			</tr>
 	   			<tr>
@@ -117,7 +117,7 @@ function ordi_register() {
 	   			<tr>
 	   				<td>
 		   				<label for="os_ordinateur">Système dexploitation  </label>
-		   				<input type="text" id="os_ordinateur" name="os_ordinateur" placeholder="'.$os_ordinateur.'" value="'.$os_ordinateur.'">
+		   				<input type="text" id="os_ordinateur" name="os_ordinateur" placeholder="'.$os_ordinateur.'" value="'.$os_ordinateur.'" required>
 		   			</td>
 	   			</tr>
 	   			<tr>
@@ -129,7 +129,7 @@ function ordi_register() {
 	   			<tr>
 	   				<td>
 		   				<label for="resolution_ordinateur">Résolution </label>
-		   				<input type="text" id="resolution_ordinateur" name="resolution_ordinateur" placeholder="'.$resolution_ordinateur.'" value="'.$resolution_ordinateur.'">
+		   				<input type="text" id="resolution_ordinateur" name="resolution_ordinateur" placeholder="'.$resolution_ordinateur.'" value="'.$resolution_ordinateur.'" required>
 		   			</td>
 	   			</tr>
 	   		</table>
@@ -158,7 +158,6 @@ function ordi_register() {
 	  	  empty($_POST["chipset_ordinateur"]) ||
 	  	  empty($_POST["dd_ordinateur"]) ||
 	  	  empty($_POST["os_ordinateur"]) ||
-	  	  empty($_POST["chipset_ordinateur"]) ||
 	  	  empty($_POST["resolution_ordinateur"])
 	  	 )
 	  	return;
