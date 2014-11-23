@@ -238,7 +238,7 @@ function ordi_register() {
 	/* META_BOX PRODUITS */
 
 	add_action("manage_posts_custom_column",  "ordi_custom_columns");
-	add_filter("manage_edit-produits_columns", "ordi_edit_columns");
+	add_filter("manage_edit-ordinateurs_columns", "ordi_edit_columns");
 
 	/* Création de Colonnes personnalisées à l'affichage des Produits */ 
 	function ordi_edit_columns($columns){
@@ -287,7 +287,7 @@ function ordi_register() {
 	      break;
 
 	    case "type":
-	      echo get_the_term_list($post->ID, 'Marques', '', ', ','');
+	      echo get_the_term_list($post->ID, 'types', '', ', ','');
 	      break;
 
 	    case "stock" :

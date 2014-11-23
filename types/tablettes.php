@@ -33,7 +33,7 @@ function tab_register() {
  	// add_theme_support('post-thumbnails');
 	register_post_type( 'tablettes' , $args );
 
-	register_taxonomy("marques", array("tablettes"), array("hierarchical" => true, "label" => "Marques", "singular_label" => "marque", "rewrite" => true));
+	register_taxonomy("marques", array("tablettes"), array("hierarchical" => true, "label" => "Types", "singular_label" => "type", "rewrite" => true));
 /****************************/
 }
 /* admin - personalisation  ajout produits */
@@ -123,7 +123,7 @@ add_action('save_post', 'save_tab');
 	}
 
 add_action("manage_posts_custom_column",  "tab_custom_columns");
-add_filter("manage_edit-produits_columns", "tab_edit_columns");
+add_filter("manage_edit-tablettes_columns", "tab_edit_columns");
 function tab_edit_columns($columns){
   $columns = array(
     "cb" => '<input type="checkbox" />',
